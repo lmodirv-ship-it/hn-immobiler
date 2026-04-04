@@ -11,7 +11,7 @@ import PropertyList from "./pages/PropertyList";
 import PropertyDetail from "./pages/PropertyDetail";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
-import NotFound from "./pages/NotFound";
+import MortgageSimulator from "./pages/MortgageSimulator";
 
 const queryClient = new QueryClient();
 
