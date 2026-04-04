@@ -3,6 +3,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Building2, Globe, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Header = () => {
   const { t, lang, setLang } = useLanguage();
@@ -13,6 +14,7 @@ const Header = () => {
     { to: '/', label: t.nav.home },
     { to: '/properties', label: t.nav.properties },
     { to: '/simulator', label: lang === 'ar' ? 'محاكي القرض' : 'Simulateur' },
+    { to: '/blog', label: 'Blog' },
     { to: '/about', label: t.nav.about },
     { to: '/contact', label: t.nav.contact },
   ];
@@ -20,88 +22,99 @@ const Header = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
+    <header className="sticky top-0 z-50 glass-strong">
+      <div className="neon-line" />
       <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <Building2 className="h-8 w-8 text-accent" />
-          <span className="font-display text-xl font-bold text-primary">
-            HN <span className="text-accent">Immobilier</span>
+        <Link to="/" className="flex items-center gap-2 group">
+          <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.6 }}>
+            <Building2 className="h-8 w-8 text-primary" />
+          </motion.div>
+          <span className="font-display text-lg font-bold tracking-wider">
+            <span className="text-gradient-cyber">HN</span>{' '}
+            <span className="text-gradient-gold">IMMO</span>
           </span>
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-1">
           {navItems.map((item) => (
             <Link
               key={item.to}
               to={item.to}
-              className={`text-sm font-medium transition-colors hover:text-accent ${
-                isActive(item.to) ? 'text-accent' : 'text-foreground'
+              className={`relative px-3 py-2 text-sm font-medium transition-all duration-300 rounded-lg ${
+                isActive(item.to)
+                  ? 'text-primary glow-border bg-primary/5'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
               }`}
             >
               {item.label}
+              {isActive(item.to) && (
+                <motion.div
+                  layoutId="nav-indicator"
+                  className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full"
+                />
+              )}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-2">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setLang(lang === 'fr' ? 'ar' : 'fr')}
-            className="gap-1"
+            className="gap-1 text-muted-foreground hover:text-primary"
           >
             <Globe className="h-4 w-4" />
-            {lang === 'fr' ? 'العربية' : 'Français'}
+            {lang === 'fr' ? 'العربية' : 'FR'}
           </Button>
           <Link to="/auth">
-            <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
+            <Button size="sm" className="bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 glow-primary font-display text-xs tracking-wider">
               {t.nav.login}
             </Button>
           </Link>
         </div>
 
-        {/* Mobile toggle */}
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden"
+          className="md:hidden text-foreground"
           onClick={() => setMobileOpen(!mobileOpen)}
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </Button>
       </div>
 
-      {/* Mobile nav */}
-      {mobileOpen && (
-        <div className="md:hidden border-t border-border bg-background p-4 space-y-3">
-          {navItems.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              onClick={() => setMobileOpen(false)}
-              className={`block py-2 text-sm font-medium ${
-                isActive(item.to) ? 'text-accent' : 'text-foreground'
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <div className="flex items-center gap-2 pt-2 border-t border-border">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setLang(lang === 'fr' ? 'ar' : 'fr')}
-            >
-              <Globe className="h-4 w-4 mr-1" />
-              {lang === 'fr' ? 'العربية' : 'Français'}
-            </Button>
-            <Link to="/auth" onClick={() => setMobileOpen(false)}>
-              <Button size="sm">{t.nav.login}</Button>
-            </Link>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="md:hidden overflow-hidden glass"
+          >
+            <div className="p-4 space-y-1">
+              {navItems.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setMobileOpen(false)}
+                  className={`block py-2.5 px-3 rounded-lg text-sm font-medium transition-colors ${
+                    isActive(item.to) ? 'text-primary bg-primary/10' : 'text-muted-foreground'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <div className="flex items-center gap-2 pt-3 border-t border-border">
+                <Button variant="ghost" size="sm" onClick={() => setLang(lang === 'fr' ? 'ar' : 'fr')}>
+                  <Globe className="h-4 w-4 mr-1" />
+                  {lang === 'fr' ? 'العربية' : 'Français'}
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };
