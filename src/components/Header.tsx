@@ -12,6 +12,7 @@ const Header = () => {
   const navItems = [
     { to: '/', label: t.nav.home },
     { to: '/properties', label: t.nav.properties },
+    { to: '/simulator', label: lang === 'ar' ? 'محاكي القرض' : 'Simulateur' },
     { to: '/about', label: t.nav.about },
     { to: '/contact', label: t.nav.contact },
   ];
