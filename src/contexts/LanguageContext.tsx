@@ -4,7 +4,7 @@ import { Lang, translations, Translations } from '@/lib/i18n';
 interface LanguageContextType {
   lang: Lang;
   setLang: (l: Lang) => void;
-  t: Translations;
+  t: Record<string, any>;
   dir: 'ltr' | 'rtl';
 }
 
