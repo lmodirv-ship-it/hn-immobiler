@@ -3,7 +3,7 @@ import { Lang, translations, Translations } from '@/lib/i18n';
 
 interface LanguageContextType {
   lang: Lang;
-  setLang: (lang: Lang) => void;
+  setLang: (l: Lang) => void;
   t: Translations;
   dir: 'ltr' | 'rtl';
 }
