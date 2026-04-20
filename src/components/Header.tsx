@@ -1,14 +1,16 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Building2, Globe, Menu, X } from 'lucide-react';
+import { Building2, Globe, Menu, X, LayoutDashboard, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/hooks/useAuth';
 
 const Header = () => {
   const { t, lang, setLang } = useLanguage();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   const navItems = [
     { to: '/', label: t.nav.home },
@@ -67,11 +69,25 @@ const Header = () => {
             <Globe className="h-4 w-4" />
             {lang === 'fr' ? 'العربية' : 'FR'}
           </Button>
-          <Link to="/auth">
-            <Button size="sm" className="bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 glow-primary font-display text-xs tracking-wider">
-              {t.nav.login}
-            </Button>
-          </Link>
+          {user ? (
+            <>
+              <Link to="/dashboard">
+                <Button size="sm" variant="ghost" className="gap-1 text-primary">
+                  <LayoutDashboard className="h-4 w-4" />
+                  {lang === 'ar' ? 'لوحتي' : 'Espace'}
+                </Button>
+              </Link>
+              <Button size="sm" variant="ghost" onClick={signOut} className="gap-1 text-muted-foreground">
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </>
+          ) : (
+            <Link to="/auth">
+              <Button size="sm" className="bg-primary/10 text-primary border border-primary/30 hover:bg-primary/20 glow-primary font-display text-xs tracking-wider">
+                {t.nav.login}
+              </Button>
+            </Link>
+          )}
         </div>
 
         <Button
