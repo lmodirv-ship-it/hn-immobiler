@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { Search, Building2, TrendingUp, Shield, Users, ArrowRight, Zap } from 'lucide-react';
+import { Search, Building2, TrendingUp, Shield, Users, ArrowRight, Zap, Play, Sparkles, Cpu, Globe2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PropertyCard from '@/components/PropertyCard';
 import { mockProperties, cities } from '@/lib/data';
+import heroFuture from '@/assets/hero-future.jpg';
+import showcaseVideo from '@/assets/showcase-video.mp4.asset.json';
 
 const Index = () => {
   const { t, lang } = useLanguage();
@@ -15,12 +17,25 @@ const Index = () => {
   return (
     <div className="flex flex-col">
       {/* Hero */}
-      <section className="relative min-h-[85vh] flex items-center overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+        {/* Background image with overlay */}
+        <div className="absolute inset-0">
+          <img
+            src={heroFuture}
+            alt="Futuristic Moroccan villa"
+            className="w-full h-full object-cover opacity-30"
+            width={1920}
+            height={1080}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/85 to-background" />
+        </div>
+
         {/* Animated background */}
         <div className="absolute inset-0 grid-bg opacity-30" />
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[120px] animate-float" />
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/5 rounded-full blur-[100px] animate-float" style={{ animationDelay: '3s' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/3 rounded-full blur-[150px] animate-glow-pulse" />
         </div>
 
         <div className="container relative z-10">
