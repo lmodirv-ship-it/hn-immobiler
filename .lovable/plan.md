@@ -1,93 +1,149 @@
 
 
-# HN - Immobilier — Plan de construction du MVP
+# HN - Immobilier — التطوير ليصبح أفضل موقع عقارات في العالم
 
-## Note technique importante
+## الرؤية
 
-Lovable utilise **React + Vite + Tailwind CSS** (pas Next.js). Le plan est adapté à cette stack. Pour le backend (auth, base de données, stockage), nous utiliserons **Lovable Cloud (Supabase)**.
-
----
-
-## Phase 1 — Fondations et design system
-
-**Fichiers concernés**: `index.css`, `tailwind.config.ts`, `index.html`, nouveaux composants
-
-- Définir la palette de couleurs HN-immobilier (bleu professionnel, accents dorés)
-- Configurer les polices (support arabe RTL + français/anglais)
-- Mettre à jour le titre et les métadonnées du site
-- Créer le layout principal : Header avec logo + navigation + sélecteur de langue, Footer
-
-## Phase 2 — Pages publiques
-
-**Nouvelles pages** : `Home`, `PropertyList`, `PropertyDetail`, `Contact`, `About`
-
-- **Page d'accueil** : Hero avec barre de recherche (ville, type, prix), section propriétés en vedette, appel à l'action
-- **Liste des propriétés** : Grille de cartes avec filtres (type, prix, surface, ville), pagination
-- **Détail propriété** : Galerie photos, informations complètes, formulaire de contact rapide, carte de localisation
-- **Contact** : Formulaire + coordonnées de l'agence
-- **À propos** : Présentation de HN-immobilier
-
-## Phase 3 — Authentification et rôles
-
-**Via Lovable Cloud (Supabase)**
-
-- 3 rôles : `visitor` (public), `owner` (propriétaire/agence), `admin`
-- Inscription / Connexion par email
-- Table `user_roles` séparée (sécurité)
-- Protection des routes selon le rôle
-
-## Phase 4 — Base de données et gestion des biens
-
-**Tables Supabase** :
-
-```text
-profiles        → id, full_name, phone, type (individual/agency), city
-properties      → id, owner_id, title, description, type (sale/rent), 
-                   price, surface, rooms, city, address, status
-property_images → id, property_id, image_url, is_primary
-listings        → id, property_id, is_featured, published_at, expires_at
-contact_requests→ id, listing_id, sender_name, sender_phone, 
-                   sender_email, message, created_at
-```
-
-- RLS policies pour chaque table
-- Storage bucket pour les photos
-
-## Phase 5 — Tableaux de bord
-
-- **Dashboard Propriétaire/Agence** : Ajouter/modifier/supprimer des biens, voir les demandes de contact reçues, statistiques simples (vues, demandes)
-- **Dashboard Admin** : Modérer les annonces, gérer les utilisateurs, voir les statistiques globales
-
-## Phase 6 — Modèle de revenus (annonces mises en avant)
-
-- Option "Annonce Premium" : mettre en avant un bien (badge + position prioritaire)
-- Gestion simple via le dashboard admin (marquer manuellement comme premium pour le MVP)
+تحويل المنصة إلى مرجع عالمي يجمع أفضل ميزات كبرى مواقع العقارات (Zillow, Realtor.com, Idealista, SeLoger, Rightmove, Mubawab, Avito) مع لمسة مستقبلية فريدة. لا حذف لأي ميزة موجودة — فقط تحسين، تطوير، وإضافة.
 
 ---
 
-## Résumé de la structure des routes
+## المرحلة 1 — البنية التحتية (Lovable Cloud)
+
+تفعيل Lovable Cloud لتوفير:
+- **المصادقة**: تسجيل دخول بالبريد، Google، الهاتف
+- **قاعدة بيانات حقيقية**: عقارات، مستخدمين، حجوزات، مفضلة، رسائل، مراجعات
+- **التخزين**: صور وفيديوهات العقارات، مستندات، صور البروفايل
+- **أدوار المستخدمين**: زائر، مشتري، مالك، وكيل، وكالة، مدير
+
+---
+
+## المرحلة 2 — البحث والاكتشاف المتقدم
+
+**شريط بحث ذكي عالمي** (في الهيدر والصفحة الرئيسية):
+- بحث فوري بالكتابة (autocomplete) على المدن والأحياء والعقارات
+- بحث صوتي
+- اقتراحات ذكية (AI-powered) بناءً على السلوك
+
+**فلاتر متقدمة** (إضافة على الفلاتر الموجودة):
+- نطاق السعر بسلايدر مزدوج
+- المساحة، عدد الغرف، الحمامات، الطوابق
+- سنة البناء، حالة العقار (جديد/مستعمل/قيد الإنشاء)
+- الميزات: مصعد، موقف سيارة، مسبح، حديقة، شرفة، مكيف، أمن 24/7، قرب من المدرسة/المسجد/المستشفى
+- نوع التشطيب، التوجيه، الإطلالة
+- حفظ البحث وتنبيهات بريدية عند توفر عقار جديد مطابق
+
+**الخريطة التفاعلية** (Leaflet + OpenStreetMap):
+- عرض جميع العقارات على خريطة المغرب بأيقونات هولوغرافية
+- البحث برسم منطقة (draw polygon)
+- طبقات: المدارس، المستشفيات، المساجد، النقل، الأمان
+- Heatmap لأسعار المناطق
+
+---
+
+## المرحلة 3 — صفحة تفاصيل العقار الاحترافية
+
+تطوير صفحة `PropertyDetail` لتشمل:
+- **معرض وسائط متقدم**: صور HD، فيديو، جولة افتراضية 360°، مخططات الطوابق
+- **كل التفاصيل**: مواصفات تقنية كاملة، ميزات، تكاليف الصيانة، الضرائب
+- **حاسبة شهرية مدمجة**: ربط مع محاكي القرض
+- **خريطة الموقع** + الخدمات المجاورة + Walk Score
+- **معلومات الوكيل/المالك**: بروفايل، تقييمات، عقارات أخرى
+- **أزرار تواصل سريعة**: WhatsApp، اتصال، رسالة داخلية، حجز زيارة
+- **تتبع الزيارات والمشاهدات** + شارة "ساخن" للعقارات الأكثر طلباً
+- **أزرار**: مفضلة، مشاركة، طباعة PDF، مقارنة
+
+---
+
+## المرحلة 4 — أدوات المستخدم القوية
+
+- **المفضلة**: حفظ العقارات في قوائم منظمة
+- **المقارنة**: مقارنة جنبًا إلى جنب حتى 4 عقارات
+- **الرسائل الداخلية**: محادثات بين المشتري والمالك/الوكيل
+- **التنبيهات**: إشعارات بريد + داخل الموقع
+- **سجل المشاهدات**: العقارات التي تصفحها المستخدم مؤخراً
+- **حجز الزيارات**: تقويم لمواعيد المعاينة
+
+---
+
+## المرحلة 5 — لوحات التحكم (Dashboards)
+
+**لوحة المالك/الوكيل**:
+- إدارة العقارات (إضافة، تعديل، حذف، تفعيل/إيقاف)
+- رفع صور وفيديوهات بسحب وإفلات
+- إحصائيات: مشاهدات، رسائل، حجوزات
+- إدارة المراسلات والحجوزات
+- ترقية إلى Premium
+
+**لوحة المدير**:
+- إحصائيات شاملة، إدارة المستخدمين والعقارات
+- مراجعة الإعلانات قبل النشر
+- إدارة المدونة والفئات
+- تقارير ومالية
+
+---
+
+## المرحلة 6 — خدمات إضافية ذات قيمة
+
+- **مساعد ذكي AI Chatbot** (Lovable AI): يجاوب على أسئلة، يقترح عقارات، يساعد في الإجراءات
+- **مقدّر سعر العقار AI**: تقدير قيمة بيع/كراء بناءً على البيانات
+- **دليل المناطق**: ملف تعريفي لكل مدينة/حي (متوسط الأسعار، تطور السوق، الخدمات)
+- **مؤشر السوق**: رسوم بيانية لاتجاهات الأسعار
+- **خدمات الشركاء**: بنوك (للقروض)، شركات نقل، مهندسين معماريين، محامين، تأمين
+- **التحقق من العقارات** (Verified badge): شارة للعقارات الموثقة
+- **المراجعات والتقييمات**: للوكلاء والوكالات
+- **نظام الإحالة**: مكافآت لجلب مستخدمين جدد
+
+---
+
+## المرحلة 7 — التميز التقني والأداء
+
+- **PWA**: تطبيق ويب قابل للتثبيت على الهاتف، يعمل offline
+- **SEO متقدم**: meta tags ديناميكية، sitemap، schema.org للعقارات
+- **مشاركة اجتماعية**: Open Graph غني لكل عقار
+- **سرعة قصوى**: lazy loading، تحسين الصور، code splitting
+- **إمكانية الوصول**: WCAG AA، قارئ شاشة، تنقل بلوحة المفاتيح
+- **متعدد اللغات**: إضافة الإنجليزية والإسبانية إلى الفرنسية والعربية
+- **عملات متعددة**: MAD، EUR، USD مع تحويل تلقائي
+
+---
+
+## المرحلة 8 — تطوير التصميم المستقبلي (دون حذف)
+
+البناء فوق الأساس الحالي (glassmorphism + neon):
+- **انتقالات بين الصفحات** سينمائية
+- **Parallax scrolling** على الصفحة الرئيسية
+- **Cursor مخصص** هولوغرافي على الديسكتوب
+- **خلفيات متحركة** (particles، grid، scan lines)
+- **Sound design** اختياري (UI sounds خفيفة)
+- **Dark/Light mode** مع الاحتفاظ بالطابع المستقبلي
+- **Micro-interactions** على كل زر وعنصر
+
+---
+
+## ترتيب التنفيذ (مراحل قابلة للتسليم)
 
 ```text
-/                    → Accueil
-/properties          → Liste des biens
-/properties/:id      → Détail d'un bien
-/contact             → Contact
-/about               → À propos
-/auth                → Connexion / Inscription
-/dashboard           → Dashboard propriétaire
-/dashboard/add       → Ajouter un bien
-/dashboard/edit/:id  → Modifier un bien
-/admin               → Dashboard admin
+Sprint 1 → Lovable Cloud + Auth + DB schema + Storage
+Sprint 2 → ربط العقارات الحالية بـ DB + رفع الصور
+Sprint 3 → بحث متقدم + فلاتر + خريطة تفاعلية
+Sprint 4 → صفحة تفاصيل محسّنة + معرض وسائط + جولة 360°
+Sprint 5 → مفضلة + مقارنة + رسائل + حجوزات
+Sprint 6 → لوحة المالك/الوكيل
+Sprint 7 → AI Chatbot + مقدّر الأسعار + دليل المناطق
+Sprint 8 → لوحة المدير + المراجعات + التحقق
+Sprint 9 → PWA + SEO + لغات وعملات إضافية
+Sprint 10 → تحسينات بصرية متقدمة + sound design
 ```
 
-## Ordre de construction
+## ملاحظة تقنية
 
-1. Design system + Layout + Page d'accueil (données statiques)
-2. Pages liste et détail (données statiques)
-3. Lovable Cloud : auth + base de données + stockage
-4. Connexion des pages aux données réelles
-5. Dashboards propriétaire et admin
-6. Annonces premium
+- **Frontend**: React + Vite + Tailwind + Framer Motion (الموجود)
+- **Backend**: Lovable Cloud (Supabase) — Auth, Postgres, Storage, Edge Functions
+- **خرائط**: Leaflet + OpenStreetMap (مجاني، لا يحتاج API key)
+- **AI**: Lovable AI Gateway (للـ chatbot وتقدير الأسعار)
+- **PDF**: jsPDF لتصدير تفاصيل العقارات
+- **Charts**: Recharts (موجود)
 
-Le MVP cible : **marché marocain**, **vente et location longue durée**, **français + arabe**.
+سنبدأ مباشرة بـ **Sprint 1** بعد موافقتك.
 
