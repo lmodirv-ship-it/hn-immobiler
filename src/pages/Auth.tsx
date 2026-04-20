@@ -3,6 +3,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { z } from 'zod';
 import { supabase } from '@/integrations/supabase/client';
+import { lovable } from '@/integrations/lovable';
 import { useAuth } from '@/hooks/useAuth';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
@@ -37,6 +38,17 @@ const Auth = () => {
   }, [user, loading, nav, loc.state]);
 
   const t = (fr: string, ar: string) => (lang === 'ar' ? ar : fr);
+
+  const handleGoogle = async () => {
+    setBusy(true);
+    const result = await lovable.auth.signInWithOAuth('google', {
+      redirect_uri: window.location.origin,
+    });
+    if (result.error) {
+      setBusy(false);
+      toast({ title: t('Échec Google', 'فشل Google'), description: String(result.error.message ?? result.error), variant: 'destructive' });
+    }
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
