@@ -139,11 +139,176 @@ const Index = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="text-center glass rounded-xl p-6 glow-border"
+                className="text-center holo-card rounded-xl p-6 corner-brackets group hover:scale-105 transition-transform duration-500"
               >
-                <stat.icon className="h-8 w-8 mx-auto text-primary mb-3" />
-                <div className="font-display text-2xl font-bold text-foreground">{stat.value}</div>
+                <stat.icon className="h-8 w-8 mx-auto text-primary mb-3 group-hover:animate-glow-pulse" />
+                <div className="font-display text-2xl font-bold text-foreground text-glitch">{stat.value}</div>
                 <div className="text-xs text-muted-foreground mt-1 font-display tracking-wider uppercase">{stat.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Video Showcase */}
+      <section className="py-20 relative overflow-hidden">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass glow-border text-xs font-display tracking-widest text-accent mb-4">
+              <Play className="h-3 w-3" />
+              {lang === 'ar' ? 'شاهد العرض' : 'DÉCOUVREZ'}
+            </div>
+            <h2 className="font-display text-2xl md:text-4xl font-bold tracking-tight">
+              <span className="text-gradient-cyber">
+                {lang === 'ar' ? 'تجربة عقارية' : 'L\'expérience immobilière'}
+              </span>
+              <br />
+              <span className="text-gradient-gold">
+                {lang === 'ar' ? 'من المستقبل' : 'du futur'}
+              </span>
+            </h2>
+            <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
+              {lang === 'ar'
+                ? 'اكتشف كيف نعيد تعريف عالم العقارات في المغرب من خلال التكنولوجيا المتقدمة والذكاء الاصطناعي'
+                : 'Découvrez comment nous redéfinissons l\'immobilier au Maroc grâce à la technologie avancée et l\'intelligence artificielle'}
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative max-w-5xl mx-auto"
+          >
+            <div className="relative rounded-2xl overflow-hidden holo-card scan-overlay glow-primary">
+              <video
+                src={showcaseVideo.url}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full aspect-video object-cover"
+              />
+              {/* HUD overlay */}
+              <div className="absolute top-4 left-4 flex items-center gap-2 glass px-3 py-1.5 rounded-lg z-10">
+                <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                <span className="font-display text-[10px] tracking-widest text-primary">LIVE • HN.IMMO</span>
+              </div>
+              <div className="absolute top-4 right-4 glass px-3 py-1.5 rounded-lg z-10">
+                <span className="font-display text-[10px] tracking-widest text-accent">4K • AI ENHANCED</span>
+              </div>
+              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between glass px-4 py-2 rounded-lg z-10">
+                <div className="flex items-center gap-3">
+                  <div className="flex gap-1">
+                    {[...Array(20)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-0.5 bg-primary/60 rounded-full"
+                        style={{
+                          height: `${8 + Math.sin(i) * 6}px`,
+                          animation: `glow-pulse ${1 + i * 0.1}s ease-in-out infinite`,
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <span className="font-display text-[10px] tracking-wider text-muted-foreground">
+                    {lang === 'ar' ? 'تحليل مباشر' : 'ANALYSE EN DIRECT'}
+                  </span>
+                </div>
+                <span className="font-display text-[10px] tracking-widest text-primary">SYS_v2.5</span>
+              </div>
+            </div>
+
+            {/* Floating feature cards around video */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+              className="hidden lg:block absolute -left-20 top-1/4 holo-card rounded-xl p-4 w-48 animate-float"
+            >
+              <Cpu className="h-5 w-5 text-primary mb-2" />
+              <div className="font-display text-xs tracking-wider text-foreground mb-1">
+                {lang === 'ar' ? 'بحث ذكي' : 'IA SEARCH'}
+              </div>
+              <div className="text-[10px] text-muted-foreground">
+                {lang === 'ar' ? 'خوارزميات متقدمة' : 'Algorithmes avancés'}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6 }}
+              className="hidden lg:block absolute -right-20 top-1/3 holo-card rounded-xl p-4 w-48 animate-float"
+              style={{ animationDelay: '1.5s' }}
+            >
+              <Globe2 className="h-5 w-5 text-accent mb-2" />
+              <div className="font-display text-xs tracking-wider text-foreground mb-1">
+                {lang === 'ar' ? 'تغطية وطنية' : 'COUVERTURE'}
+              </div>
+              <div className="text-[10px] text-muted-foreground">
+                {lang === 'ar' ? 'كل المدن المغربية' : 'Tout le Maroc'}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.8 }}
+              className="hidden lg:block absolute -right-12 bottom-8 holo-card rounded-xl p-4 w-48 animate-float"
+              style={{ animationDelay: '3s' }}
+            >
+              <Sparkles className="h-5 w-5 text-accent mb-2" />
+              <div className="font-display text-xs tracking-wider text-foreground mb-1">
+                {lang === 'ar' ? 'تجربة فاخرة' : 'PREMIUM UX'}
+              </div>
+              <div className="text-[10px] text-muted-foreground">
+                {lang === 'ar' ? 'تصميم استثنائي' : 'Design exceptionnel'}
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Feature highlights */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-5xl mx-auto">
+            {[
+              {
+                icon: Cpu,
+                title: lang === 'ar' ? 'ذكاء اصطناعي' : 'Intelligence Artificielle',
+                desc: lang === 'ar' ? 'توصيات مخصصة بناءً على تفضيلاتك' : 'Recommandations personnalisées',
+              },
+              {
+                icon: Sparkles,
+                title: lang === 'ar' ? 'محاكي القرض' : 'Simulateur Crédit',
+                desc: lang === 'ar' ? 'احسب قرضك العقاري فوراً' : 'Calculez votre prêt instantanément',
+              },
+              {
+                icon: Globe2,
+                title: lang === 'ar' ? 'ثنائي اللغة' : 'Bilingue',
+                desc: lang === 'ar' ? 'تجربة كاملة بالعربية والفرنسية' : 'Français & Arabe complet',
+              },
+            ].map((f, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="holo-card rounded-xl p-6 corner-brackets group hover:glow-primary transition-all duration-500"
+              >
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                  <f.icon className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="font-display text-sm tracking-wider text-foreground mb-2">{f.title}</h3>
+                <p className="text-xs text-muted-foreground">{f.desc}</p>
               </motion.div>
             ))}
           </div>
