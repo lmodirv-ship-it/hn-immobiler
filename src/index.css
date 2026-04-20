@@ -133,4 +133,74 @@
     background-image: radial-gradient(circle at 1px 1px, hsl(200 100% 55% / 0.15) 1px, transparent 0);
     background-size: 40px 40px;
   }
+
+  .holo-card {
+    background: linear-gradient(135deg, hsl(200 100% 55% / 0.08), hsl(45 100% 55% / 0.04));
+    border: 1px solid hsl(200 100% 55% / 0.25);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 0 30px hsl(200 100% 55% / 0.1), inset 0 0 20px hsl(200 100% 55% / 0.05);
+  }
+
+  .scan-overlay {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scan-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, hsl(200 100% 55% / 0.15) 50%, transparent 100%);
+    height: 30%;
+    animation: scan-vertical 4s linear infinite;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  @keyframes scan-vertical {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(400%); }
+  }
+
+  .corner-brackets {
+    position: relative;
+  }
+
+  .corner-brackets::before,
+  .corner-brackets::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-color: hsl(200 100% 55%);
+    border-style: solid;
+  }
+
+  .corner-brackets::before {
+    top: 8px; left: 8px;
+    border-width: 2px 0 0 2px;
+  }
+
+  .corner-brackets::after {
+    bottom: 8px; right: 8px;
+    border-width: 0 2px 2px 0;
+  }
+
+  .text-glitch {
+    text-shadow:
+      0 0 10px hsl(200 100% 55% / 0.5),
+      0 0 20px hsl(200 100% 55% / 0.3);
+  }
+
+  .animated-gradient {
+    background: linear-gradient(135deg, hsl(200 100% 55% / 0.15), hsl(260 80% 60% / 0.1), hsl(45 100% 55% / 0.1));
+    background-size: 300% 300%;
+    animation: gradient-shift 12s ease infinite;
+  }
+
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
 }
