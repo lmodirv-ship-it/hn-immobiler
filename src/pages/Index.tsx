@@ -90,6 +90,26 @@ const Index = () => {
 
   return (
     <div className="flex flex-col">
+      <SEO
+        title="HN Immobilier — Vente & Location au Maroc | Casablanca, Marrakech, Tanger"
+        description="Plateforme immobilière #1 au Maroc. Achetez, vendez ou louez appartements, villas, riads et terrains à Casablanca, Marrakech, Tanger, Rabat. Bilingue FR/AR."
+        url="/"
+        lang={lang as 'fr' | 'ar'}
+        keywords={[
+          'immobilier Maroc', 'achat appartement Casablanca', 'villa Marrakech',
+          'location Rabat', 'riad Marrakech', 'terrain Maroc', 'agence immobilière Maroc',
+          'real estate Morocco', 'invest Morocco', 'عقارات المغرب', 'شراء شقة',
+        ]}
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "RealEstateAgent",
+          name: "HN Immobilier",
+          url: "https://hn-immobiler.lovable.app",
+          areaServed: { "@type": "Country", name: "Morocco" },
+          address: { "@type": "PostalAddress", addressCountry: "MA" },
+          inLanguage: ["fr", "ar"],
+        }}
+      />
       {/* ============ HERO CINEMATIC ============ */}
       <section
         ref={heroRef}
