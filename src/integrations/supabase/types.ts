@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      bank_accounts: {
+        Row: {
+          account_holder: string
+          account_type: string
+          active: boolean | null
+          bank_name: string
+          created_at: string
+          display_order: number | null
+          iban: string | null
+          id: string
+          rib: string | null
+          swift: string | null
+        }
+        Insert: {
+          account_holder: string
+          account_type?: string
+          active?: boolean | null
+          bank_name: string
+          created_at?: string
+          display_order?: number | null
+          iban?: string | null
+          id?: string
+          rib?: string | null
+          swift?: string | null
+        }
+        Update: {
+          account_holder?: string
+          account_type?: string
+          active?: boolean | null
+          bank_name?: string
+          created_at?: string
+          display_order?: number | null
+          iban?: string | null
+          id?: string
+          rib?: string | null
+          swift?: string | null
+        }
+        Relationships: []
+      }
       comparisons: {
         Row: {
           added_at: string
@@ -174,6 +213,87 @@ export type Database = {
           transaction_interest?: string | null
         }
         Relationships: []
+      }
+      payment_transactions: {
+        Row: {
+          admin_notes: string | null
+          agency_name: string | null
+          amount: number
+          created_at: string
+          currency: string
+          id: string
+          method: Database["public"]["Enums"]["payment_method"]
+          notes: string | null
+          payer_name: string | null
+          payer_phone: string | null
+          plan_id: string | null
+          proof_url: string | null
+          reference: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: Database["public"]["Enums"]["payment_status"]
+          subscription_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          agency_name?: string | null
+          amount: number
+          created_at?: string
+          currency?: string
+          id?: string
+          method: Database["public"]["Enums"]["payment_method"]
+          notes?: string | null
+          payer_name?: string | null
+          payer_phone?: string | null
+          plan_id?: string | null
+          proof_url?: string | null
+          reference?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          subscription_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          agency_name?: string | null
+          amount?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          method?: Database["public"]["Enums"]["payment_method"]
+          notes?: string | null
+          payer_name?: string | null
+          payer_phone?: string | null
+          plan_id?: string | null
+          proof_url?: string | null
+          reference?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["payment_status"]
+          subscription_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_transactions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_transactions_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -553,6 +673,98 @@ export type Database = {
         }
         Relationships: []
       }
+      subscription_plans: {
+        Row: {
+          active: boolean | null
+          created_at: string
+          currency: string
+          display_order: number | null
+          featured: boolean | null
+          features: Json | null
+          id: string
+          interval: string
+          max_listings: number | null
+          name: string
+          name_ar: string | null
+          price: number
+          slug: string
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string
+          currency?: string
+          display_order?: number | null
+          featured?: boolean | null
+          features?: Json | null
+          id?: string
+          interval?: string
+          max_listings?: number | null
+          name: string
+          name_ar?: string | null
+          price: number
+          slug: string
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string
+          currency?: string
+          display_order?: number | null
+          featured?: boolean | null
+          features?: Json | null
+          id?: string
+          interval?: string
+          max_listings?: number | null
+          name?: string
+          name_ar?: string | null
+          price?: number
+          slug?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          auto_renew: boolean | null
+          created_at: string
+          ends_at: string | null
+          id: string
+          plan_id: string
+          starts_at: string | null
+          status: Database["public"]["Enums"]["subscription_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          auto_renew?: boolean | null
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          plan_id: string
+          starts_at?: string | null
+          status?: Database["public"]["Enums"]["subscription_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          auto_renew?: boolean | null
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          plan_id?: string
+          starts_at?: string | null
+          status?: Database["public"]["Enums"]["subscription_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "subscription_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -638,6 +850,16 @@ export type Database = {
     }
     Enums: {
       app_role: "user" | "owner" | "agent" | "agency" | "admin"
+      payment_method:
+        | "cash"
+        | "wallet"
+        | "cmi"
+        | "payzone"
+        | "stripe"
+        | "bank_transfer"
+        | "agency_transfer"
+        | "paypal"
+      payment_status: "pending" | "confirmed" | "rejected" | "refunded"
       profile_type: "individual" | "agency" | "agent"
       property_condition:
         | "new"
@@ -661,6 +883,7 @@ export type Database = {
         | "office"
         | "riad"
         | "studio"
+      subscription_status: "pending" | "active" | "expired" | "cancelled"
       transaction_type: "sale" | "rent"
       viewing_status: "pending" | "confirmed" | "completed" | "cancelled"
     }
@@ -791,6 +1014,17 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["user", "owner", "agent", "agency", "admin"],
+      payment_method: [
+        "cash",
+        "wallet",
+        "cmi",
+        "payzone",
+        "stripe",
+        "bank_transfer",
+        "agency_transfer",
+        "paypal",
+      ],
+      payment_status: ["pending", "confirmed", "rejected", "refunded"],
       profile_type: ["individual", "agency", "agent"],
       property_condition: [
         "new",
@@ -817,6 +1051,7 @@ export const Constants = {
         "riad",
         "studio",
       ],
+      subscription_status: ["pending", "active", "expired", "cancelled"],
       transaction_type: ["sale", "rent"],
       viewing_status: ["pending", "confirmed", "completed", "cancelled"],
     },

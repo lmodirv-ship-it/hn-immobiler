@@ -30,6 +30,7 @@ const Header = () => {
     { to: '/properties', label: t.nav.properties },
     { to: '/map', label: lang === 'ar' ? 'الخريطة' : 'Carte' },
     { to: '/simulator', label: lang === 'ar' ? 'محاكي القرض' : 'Simulateur' },
+    { to: '/pricing', label: lang === 'ar' ? 'الأسعار' : 'Tarifs' },
     { to: '/blog', label: 'Blog' },
     { to: '/about', label: t.nav.about },
     { to: '/contact', label: t.nav.contact },

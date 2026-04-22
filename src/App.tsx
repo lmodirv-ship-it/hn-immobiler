@@ -26,6 +26,9 @@ import Messages from "./pages/Messages";
 import Viewings from "./pages/Viewings";
 import Compare from "./pages/Compare";
 import NotFound from "./pages/NotFound";
+import Pricing from "./pages/Pricing";
+import Checkout from "./pages/Checkout";
+import AdminPayments from "./pages/admin/Payments";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +54,9 @@ const App = () => (
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/blog/:id" element={<BlogPost />} />
                   <Route path="/auth" element={<Auth />} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/checkout/:planId" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+                  <Route path="/admin/payments" element={<ProtectedRoute><AdminPayments /></ProtectedRoute>} />
                   <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                   <Route path="/dashboard/properties" element={<ProtectedRoute><MyProperties /></ProtectedRoute>} />
                   <Route path="/dashboard/properties/new" element={<ProtectedRoute><NewProperty /></ProtectedRoute>} />
