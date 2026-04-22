@@ -1,16 +1,28 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Building2, Globe, Menu, X, LayoutDashboard, LogOut, MessageSquare, GitCompare } from 'lucide-react';
+import { Building2, Globe, Menu, X, LayoutDashboard, LogOut, MessageSquare, GitCompare, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
+import GeoBadge from '@/components/GeoBadge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const Header = () => {
   const { t, lang, setLang } = useLanguage();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, signOut } = useAuth();
+
+  const pickLang = (l: 'fr' | 'ar') => {
+    localStorage.setItem('hn_lang_picked', '1');
+    setLang(l);
+  };
 
   const navItems = [
     { to: '/', label: t.nav.home },
@@ -61,15 +73,23 @@ const Header = () => {
         </nav>
 
         <div className="hidden md:flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setLang(lang === 'fr' ? 'ar' : 'fr')}
-            className="gap-1 text-muted-foreground hover:text-primary"
-          >
-            <Globe className="h-4 w-4" />
-            {lang === 'fr' ? 'العربية' : 'FR'}
-          </Button>
+          <GeoBadge />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="gap-1 text-muted-foreground hover:text-primary">
+                <Globe className="h-4 w-4" />
+                <span className="text-xs font-display tracking-wider uppercase">{lang}</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="min-w-[140px]">
+              <DropdownMenuItem onClick={() => pickLang('fr')} className="gap-2">
+                🇫🇷 Français {lang === 'fr' && <Check className="h-3.5 w-3.5 ml-auto text-primary" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => pickLang('ar')} className="gap-2">
+                🇲🇦 العربية {lang === 'ar' && <Check className="h-3.5 w-3.5 ml-auto text-primary" />}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           {user ? (
             <>
               <Link to="/dashboard/messages">
@@ -133,7 +153,8 @@ const Header = () => {
                 </Link>
               ))}
               <div className="flex items-center gap-2 pt-3 border-t border-border">
-                <Button variant="ghost" size="sm" onClick={() => setLang(lang === 'fr' ? 'ar' : 'fr')}>
+                <GeoBadge />
+                <Button variant="ghost" size="sm" onClick={() => pickLang(lang === 'fr' ? 'ar' : 'fr')}>
                   <Globe className="h-4 w-4 mr-1" />
                   {lang === 'fr' ? 'العربية' : 'Français'}
                 </Button>
