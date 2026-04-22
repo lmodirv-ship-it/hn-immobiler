@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import GeoBadge from '@/components/GeoBadge';
+import VisitorCounter from '@/components/VisitorCounter';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,15 +41,18 @@ const Header = () => {
     <header className="sticky top-0 z-50 glass-strong">
       <div className="neon-line" />
       <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.6 }}>
-            <Building2 className="h-8 w-8 text-primary" />
-          </motion.div>
-          <span className="font-display text-lg font-bold tracking-wider">
-            <span className="text-gradient-cyber">HN</span>{' '}
-            <span className="text-gradient-gold">IMMO</span>
-          </span>
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-2 group">
+            <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.6 }}>
+              <Building2 className="h-8 w-8 text-primary" />
+            </motion.div>
+            <span className="font-display text-lg font-bold tracking-wider">
+              <span className="text-gradient-cyber">HN</span>{' '}
+              <span className="text-gradient-gold">IMMO</span>
+            </span>
+          </Link>
+          <VisitorCounter />
+        </div>
 
         <nav className="hidden md:flex items-center gap-1">
           {navItems.map((item) => (

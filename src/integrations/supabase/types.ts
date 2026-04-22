@@ -529,6 +529,30 @@ export type Database = {
         }
         Relationships: []
       }
+      site_visits: {
+        Row: {
+          country: string | null
+          created_at: string
+          id: number
+          path: string | null
+          session_hash: string | null
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string
+          id?: number
+          path?: string | null
+          session_hash?: string | null
+        }
+        Update: {
+          country?: string | null
+          created_at?: string
+          id?: number
+          path?: string | null
+          session_hash?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -596,6 +620,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_visitor_stats: {
+        Args: never
+        Returns: {
+          online: number
+          today: number
+          total: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
