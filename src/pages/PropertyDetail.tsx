@@ -88,7 +88,7 @@ const PropertyDetail = () => {
       return;
     }
     setSubmitting(true);
-    const { error } = await supabase.from('contact_requests').insert({ ...parsed.data, property_id: property.id });
+    const { error } = await supabase.from('contact_requests').insert([{ ...parsed.data, property_id: property.id }]);
     setSubmitting(false);
     if (error) {
       toast({ title: lang === 'ar' ? 'حدث خطأ' : 'Erreur lors de l\'envoi', variant: 'destructive' });
