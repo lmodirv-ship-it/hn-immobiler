@@ -69,7 +69,7 @@ const PropertyMap = ({ properties, height = '70vh' }: Props) => {
         <FitBounds points={points} />
         {properties.map((p) =>
           p.lat != null && p.lng != null ? (
-            <Marker key={p.id} position={[Number(p.lat), Number(p.lng)]} icon={neonIcon}>
+            <Marker key={p.id} position={[Number(p.lat), Number(p.lng)]} icon={neonIcon as any}>
               <Popup>
                 <Link to={`/properties/${p.id}`} className="block w-56">
                   <img src={getPrimaryImage(p)} alt={p.title} className="w-full h-28 object-cover rounded-md mb-2" />
