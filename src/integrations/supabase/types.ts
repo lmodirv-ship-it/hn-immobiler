@@ -145,6 +145,36 @@ export type Database = {
           },
         ]
       }
+      newsletter_subscribers: {
+        Row: {
+          city_interest: string | null
+          confirmed: boolean | null
+          created_at: string
+          email: string
+          id: string
+          lang: string | null
+          transaction_interest: string | null
+        }
+        Insert: {
+          city_interest?: string | null
+          confirmed?: boolean | null
+          created_at?: string
+          email: string
+          id?: string
+          lang?: string | null
+          transaction_interest?: string | null
+        }
+        Update: {
+          city_interest?: string | null
+          confirmed?: boolean | null
+          created_at?: string
+          email?: string
+          id?: string
+          lang?: string | null
+          transaction_interest?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           agency_name: string | null
