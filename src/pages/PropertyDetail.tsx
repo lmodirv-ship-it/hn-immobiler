@@ -207,7 +207,7 @@ const PropertyDetail = () => {
                 {isFav ? (lang === 'ar' ? 'محفوظ' : 'Sauvegardé') : (lang === 'ar' ? 'حفظ' : 'Sauver')}
               </Button>
               <a href={waLink} target="_blank" rel="noopener noreferrer" className="flex-1">
-                <Button variant="outline" className="w-full gap-2 border-green-500/50 text-green-400 hover:bg-green-500/10">
+                <Button variant="outline" className="w-full gap-2 border-accent/50 text-accent hover:bg-accent/10">
                   <MessageCircle className="h-4 w-4" /> WhatsApp
                 </Button>
               </a>
