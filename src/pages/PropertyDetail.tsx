@@ -6,13 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, MapPin, Maximize2, BedDouble, Star, Phone, Mail, Heart, MessageCircle, Loader2, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, MapPin, Maximize2, BedDouble, Star, Phone, Mail, Heart, MessageCircle, Loader2, ShieldCheck, GitCompare, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { formatPriceDb } from '@/lib/property-helpers';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { z } from 'zod';
+import BookViewingDialog from '@/components/BookViewingDialog';
 
 const contactSchema = z.object({
   sender_name: z.string().trim().min(2).max(100),
@@ -29,6 +30,7 @@ const PropertyDetail = () => {
   const { data: property, isLoading } = useProperty(id);
   const [selectedImage, setSelectedImage] = useState(0);
   const [isFav, setIsFav] = useState(false);
+  const [isCmp, setIsCmp] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({ sender_name: '', sender_email: '', sender_phone: '', message: '' });
 
@@ -47,6 +49,8 @@ const PropertyDetail = () => {
     if (!user || !id) return;
     supabase.from('favorites').select('property_id').eq('user_id', user.id).eq('property_id', id).maybeSingle()
       .then(({ data }) => setIsFav(!!data));
+    supabase.from('comparisons').select('property_id').eq('user_id', user.id).eq('property_id', id).maybeSingle()
+      .then(({ data }) => setIsCmp(!!data));
   }, [user, id]);
 
   if (isLoading) {
