@@ -14,6 +14,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { z } from 'zod';
 import BookViewingDialog from '@/components/BookViewingDialog';
+import SEO from '@/components/SEO';
+import ShareButtons from '@/components/ShareButtons';
 
 const contactSchema = z.object({
   sender_name: z.string().trim().min(2).max(100),
@@ -137,6 +139,42 @@ const PropertyDetail = () => {
 
   return (
     <div className="container py-10">
+      <SEO
+        title={`${title} — ${property.city} | HN Immobilier`}
+        description={(description || `${property.property_type} ${property.transaction_type === 'sale' ? 'à vendre' : 'à louer'} à ${property.city}, Maroc. ${property.surface ? property.surface + 'm². ' : ''}${property.rooms ? property.rooms + ' pièces. ' : ''}`).slice(0, 160)}
+        image={images[0]}
+        url={`/properties/${property.id}`}
+        type="product"
+        lang={lang as 'fr' | 'ar'}
+        keywords={[
+          property.city, property.property_type,
+          property.transaction_type === 'sale' ? 'achat immobilier Maroc' : 'location Maroc',
+          'HN Immobilier', `immobilier ${property.city}`,
+        ]}
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": property.transaction_type === 'sale' ? "Product" : "Accommodation",
+          name: title,
+          description,
+          image: images,
+          offers: {
+            "@type": "Offer",
+            price: Number(property.price),
+            priceCurrency: property.currency || "MAD",
+            availability: "https://schema.org/InStock",
+          },
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: property.city,
+            addressCountry: "MA",
+            streetAddress: property.address || undefined,
+          },
+          ...(property.surface && {
+            floorSize: { "@type": "QuantitativeValue", value: property.surface, unitCode: "MTK" },
+          }),
+          ...(property.rooms && { numberOfRooms: property.rooms }),
+        }}
+      />
       <Link to="/properties" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
         <ArrowLeft className="h-4 w-4" /> {t.nav.properties}
       </Link>
@@ -224,6 +262,14 @@ const PropertyDetail = () => {
           <div className="glass rounded-xl p-6 glow-border">
             <h3 className="font-display text-sm tracking-widest uppercase text-primary mb-4">{t.property.description}</h3>
             <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{description}</p>
+          </div>
+
+          <div className="glass rounded-xl p-6 glow-border">
+            <ShareButtons
+              url={`/properties/${property.id}`}
+              title={title}
+              text={`${property.city} — ${formatPriceDb(Number(property.price), property.transaction_type, lang)}`}
+            />
           </div>
         </motion.div>
 
