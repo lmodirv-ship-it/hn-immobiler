@@ -241,6 +241,18 @@ const PropertyDetail = () => {
               </a>
             </div>
 
+            <div className="flex gap-2">
+              <Button onClick={toggleCmp} variant={isCmp ? 'default' : 'outline'} className="flex-1 gap-2">
+                <GitCompare className="h-4 w-4" />
+                {isCmp ? (lang === 'ar' ? 'في المقارنة' : 'À comparer') : (lang === 'ar' ? 'مقارنة' : 'Comparer')}
+              </Button>
+              <Button onClick={sendInternalMessage} variant="outline" className="flex-1 gap-2 border-primary/40">
+                <Send className="h-4 w-4" /> {lang === 'ar' ? 'رسالة خاصة' : 'Message privé'}
+              </Button>
+            </div>
+
+            <BookViewingDialog propertyId={property.id} ownerId={property.owner_id} />
+
             <div className="border-t border-border/50 pt-4">
               <p className="text-xs text-muted-foreground mb-1">{lang === 'ar' ? 'العارض' : 'Annonceur'}</p>
               <p className="font-semibold flex items-center gap-1">{ownerName}{property.profiles?.verified && <ShieldCheck className="h-4 w-4 text-primary" />}</p>
