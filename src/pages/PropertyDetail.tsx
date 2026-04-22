@@ -6,13 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, MapPin, Maximize2, BedDouble, Star, Phone, Mail, Heart, MessageCircle, Loader2, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, MapPin, Maximize2, BedDouble, Star, Phone, Mail, Heart, MessageCircle, Loader2, ShieldCheck, GitCompare, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import { formatPriceDb } from '@/lib/property-helpers';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { z } from 'zod';
+import BookViewingDialog from '@/components/BookViewingDialog';
 
 const contactSchema = z.object({
   sender_name: z.string().trim().min(2).max(100),
@@ -29,6 +30,7 @@ const PropertyDetail = () => {
   const { data: property, isLoading } = useProperty(id);
   const [selectedImage, setSelectedImage] = useState(0);
   const [isFav, setIsFav] = useState(false);
+  const [isCmp, setIsCmp] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({ sender_name: '', sender_email: '', sender_phone: '', message: '' });
 
@@ -47,6 +49,8 @@ const PropertyDetail = () => {
     if (!user || !id) return;
     supabase.from('favorites').select('property_id').eq('user_id', user.id).eq('property_id', id).maybeSingle()
       .then(({ data }) => setIsFav(!!data));
+    supabase.from('comparisons').select('property_id').eq('user_id', user.id).eq('property_id', id).maybeSingle()
+      .then(({ data }) => setIsCmp(!!data));
   }, [user, id]);
 
   if (isLoading) {
@@ -106,6 +110,30 @@ const PropertyDetail = () => {
   };
 
   const waLink = `https://wa.me/${ownerPhone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(form.message || title)}`;
+
+  const toggleCmp = async () => {
+    if (!user) { navigate('/auth'); return; }
+    if (isCmp) {
+      await supabase.from('comparisons').delete().eq('user_id', user.id).eq('property_id', property.id);
+      setIsCmp(false);
+      toast({ title: lang === 'ar' ? 'أُزيل من المقارنة' : 'Retiré de la comparaison' });
+    } else {
+      await supabase.from('comparisons').insert({ user_id: user.id, property_id: property.id });
+      setIsCmp(true);
+      toast({ title: lang === 'ar' ? 'أُضيف للمقارنة' : 'Ajouté à la comparaison' });
+    }
+  };
+
+  const sendInternalMessage = async () => {
+    if (!user) { navigate('/auth'); return; }
+    if (user.id === property.owner_id) { toast({ title: lang === 'ar' ? 'أنت المالك' : 'Vous êtes le propriétaire', variant: 'destructive' }); return; }
+    const content = form.message || title;
+    const { error } = await supabase.from('messages').insert({
+      sender_id: user.id, recipient_id: property.owner_id, content, property_id: property.id,
+    });
+    if (error) toast({ title: lang === 'ar' ? 'حدث خطأ' : 'Erreur', variant: 'destructive' });
+    else { toast({ title: lang === 'ar' ? 'تم إرسال الرسالة' : 'Message envoyé' }); navigate('/dashboard/messages'); }
+  };
 
   return (
     <div className="container py-10">
@@ -212,6 +240,18 @@ const PropertyDetail = () => {
                 </Button>
               </a>
             </div>
+
+            <div className="flex gap-2">
+              <Button onClick={toggleCmp} variant={isCmp ? 'default' : 'outline'} className="flex-1 gap-2">
+                <GitCompare className="h-4 w-4" />
+                {isCmp ? (lang === 'ar' ? 'في المقارنة' : 'À comparer') : (lang === 'ar' ? 'مقارنة' : 'Comparer')}
+              </Button>
+              <Button onClick={sendInternalMessage} variant="outline" className="flex-1 gap-2 border-primary/40">
+                <Send className="h-4 w-4" /> {lang === 'ar' ? 'رسالة خاصة' : 'Message privé'}
+              </Button>
+            </div>
+
+            <BookViewingDialog propertyId={property.id} ownerId={property.owner_id} />
 
             <div className="border-t border-border/50 pt-4">
               <p className="text-xs text-muted-foreground mb-1">{lang === 'ar' ? 'العارض' : 'Annonceur'}</p>

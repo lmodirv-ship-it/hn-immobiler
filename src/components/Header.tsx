@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Building2, Globe, Menu, X, LayoutDashboard, LogOut } from 'lucide-react';
+import { Building2, Globe, Menu, X, LayoutDashboard, LogOut, MessageSquare, GitCompare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -72,6 +72,16 @@ const Header = () => {
           </Button>
           {user ? (
             <>
+              <Link to="/dashboard/messages">
+                <Button size="sm" variant="ghost" className="gap-1 text-muted-foreground hover:text-primary">
+                  <MessageSquare className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link to="/compare">
+                <Button size="sm" variant="ghost" className="gap-1 text-muted-foreground hover:text-primary">
+                  <GitCompare className="h-4 w-4" />
+                </Button>
+              </Link>
               <Link to="/dashboard">
                 <Button size="sm" variant="ghost" className="gap-1 text-primary">
                   <LayoutDashboard className="h-4 w-4" />

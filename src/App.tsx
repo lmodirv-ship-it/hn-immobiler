@@ -22,6 +22,9 @@ import Favorites from "./pages/Favorites";
 import MyProperties from "./pages/MyProperties";
 import NewProperty from "./pages/NewProperty";
 import MapView from "./pages/MapView";
+import Messages from "./pages/Messages";
+import Viewings from "./pages/Viewings";
+import Compare from "./pages/Compare";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -51,6 +54,9 @@ const App = () => (
                   <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                   <Route path="/dashboard/properties" element={<ProtectedRoute><MyProperties /></ProtectedRoute>} />
                   <Route path="/dashboard/properties/new" element={<ProtectedRoute><NewProperty /></ProtectedRoute>} />
+                  <Route path="/dashboard/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+                  <Route path="/dashboard/viewings" element={<ProtectedRoute><Viewings /></ProtectedRoute>} />
+                  <Route path="/compare" element={<ProtectedRoute><Compare /></ProtectedRoute>} />
                   <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

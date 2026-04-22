@@ -29,8 +29,8 @@ const Dashboard = () => {
   const cards = [
     { to: '/favorites', icon: Heart, label: t('Mes favoris', 'مفضلتي'), value: stats?.favs ?? 0 },
     { to: '/dashboard/properties', icon: Building2, label: t('Mes biens', 'عقاراتي'), value: stats?.props ?? 0 },
-    { to: '/dashboard', icon: MessageSquare, label: t('Messages', 'الرسائل'), value: stats?.msgs ?? 0 },
-    { to: '/dashboard', icon: Calendar, label: t('Visites', 'الزيارات'), value: stats?.views ?? 0 },
+    { to: '/dashboard/messages', icon: MessageSquare, label: t('Messages', 'الرسائل'), value: stats?.msgs ?? 0 },
+    { to: '/dashboard/viewings', icon: Calendar, label: t('Visites', 'الزيارات'), value: stats?.views ?? 0 },
   ];
 
   return (
