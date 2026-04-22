@@ -6,13 +6,17 @@ interface SEOProps {
   image?: string;
   url?: string;
   type?: "website" | "article" | "product";
-  lang?: "fr" | "ar" | "en";
+  lang?: "fr" | "ar" | "en" | "es" | "de";
   jsonLd?: Record<string, any>;
   keywords?: string[];
 }
 
 const SITE = "https://hn-immobiler.lovable.app";
 const DEFAULT_IMG = `${SITE}/og-default.jpg`;
+const SUPPORTED_LANGS: Array<"fr" | "ar" | "en" | "es" | "de"> = ["fr", "ar", "en", "es", "de"];
+const OG_LOCALE: Record<string, string> = {
+  fr: "fr_MA", ar: "ar_MA", en: "en_US", es: "es_ES", de: "de_DE",
+};
 
 const SEO = ({
   title,
@@ -33,7 +37,7 @@ const SEO = ({
     : SITE;
   const fullTitle = title.length > 60 ? title.slice(0, 57) + "..." : title;
   const fullDesc = description.length > 160 ? description.slice(0, 157) + "..." : description;
-  const ogLocale = lang === "ar" ? "ar_MA" : lang === "en" ? "en_US" : "fr_MA";
+  const ogLocale = OG_LOCALE[lang] || "fr_MA";
 
   useEffect(() => {
     document.title = fullTitle;
@@ -67,6 +71,23 @@ const SEO = ({
     setMeta(`meta[name="twitter:title"]`, "name", "twitter:title", fullTitle);
     setMeta(`meta[name="twitter:description"]`, "name", "twitter:description", fullDesc);
     setMeta(`meta[name="twitter:image"]`, "name", "twitter:image", image);
+
+    // hreflang alternates — clear previous then set fresh
+    document.head.querySelectorAll('link[data-hreflang="1"]').forEach((n) => n.remove());
+    SUPPORTED_LANGS.forEach((l) => {
+      const link = document.createElement("link");
+      link.rel = "alternate";
+      link.hreflang = l;
+      link.href = fullUrl;
+      link.setAttribute("data-hreflang", "1");
+      document.head.appendChild(link);
+    });
+    const xDefault = document.createElement("link");
+    xDefault.rel = "alternate";
+    xDefault.hreflang = "x-default";
+    xDefault.href = fullUrl;
+    xDefault.setAttribute("data-hreflang", "1");
+    document.head.appendChild(xDefault);
 
     // JSON-LD
     const existing = document.getElementById("seo-jsonld");

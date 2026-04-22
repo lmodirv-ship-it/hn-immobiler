@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
 import GeoBadge from '@/components/GeoBadge';
 import VisitorCounter from '@/components/VisitorCounter';
+import CurrencySelector from '@/components/CurrencySelector';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +21,7 @@ const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, signOut } = useAuth();
 
-  const pickLang = (l: 'fr' | 'ar') => {
+  const pickLang = (l: 'fr' | 'ar' | 'en' | 'es' | 'de') => {
     localStorage.setItem('hn_lang_picked', '1');
     setLang(l);
   };
@@ -79,6 +80,7 @@ const Header = () => {
 
         <div className="hidden md:flex items-center gap-2">
           <GeoBadge />
+          <CurrencySelector />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="gap-1 text-muted-foreground hover:text-primary">
@@ -86,12 +88,21 @@ const Header = () => {
                 <span className="text-xs font-display tracking-wider uppercase">{lang}</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="min-w-[140px]">
+            <DropdownMenuContent align="end" className="min-w-[160px]">
               <DropdownMenuItem onClick={() => pickLang('fr')} className="gap-2">
                 🇫🇷 Français {lang === 'fr' && <Check className="h-3.5 w-3.5 ml-auto text-primary" />}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => pickLang('ar')} className="gap-2">
                 🇲🇦 العربية {lang === 'ar' && <Check className="h-3.5 w-3.5 ml-auto text-primary" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => pickLang('en')} className="gap-2">
+                🇬🇧 English {lang === 'en' && <Check className="h-3.5 w-3.5 ml-auto text-primary" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => pickLang('es')} className="gap-2">
+                🇪🇸 Español {lang === 'es' && <Check className="h-3.5 w-3.5 ml-auto text-primary" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => pickLang('de')} className="gap-2">
+                🇩🇪 Deutsch {lang === 'de' && <Check className="h-3.5 w-3.5 ml-auto text-primary" />}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

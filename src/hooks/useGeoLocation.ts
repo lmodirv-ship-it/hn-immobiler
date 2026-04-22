@@ -5,17 +5,22 @@ export interface GeoInfo {
   countryName: string;
   flag: string; // emoji
   city?: string;
-  suggestedLang: "fr" | "ar";
+  suggestedLang: "fr" | "ar" | "en" | "es" | "de";
 }
 
 const CACHE_KEY = "hn_geo_v1";
 const CACHE_TTL = 24 * 60 * 60 * 1000; // 24h
 
-// Countries where Arabic is the suggested default
-const ARABIC_COUNTRIES = new Set([
-  "MA", "DZ", "TN", "EG", "SA", "AE", "QA", "KW", "BH", "OM",
-  "JO", "LB", "SY", "IQ", "YE", "PS", "LY", "SD", "MR", "DJ", "SO", "KM",
-]);
+// Country → suggested UI language
+const LANG_BY_COUNTRY: Record<string, "ar" | "fr" | "en" | "es" | "de"> = {
+  MA: "ar", DZ: "ar", TN: "ar", EG: "ar", SA: "ar", AE: "ar", QA: "ar", KW: "ar", BH: "ar", OM: "ar",
+  JO: "ar", LB: "ar", SY: "ar", IQ: "ar", YE: "ar", PS: "ar", LY: "ar", SD: "ar", MR: "ar", DJ: "ar", SO: "ar", KM: "ar",
+  FR: "fr", BE: "fr", LU: "fr", CH: "fr", CA: "fr", SN: "fr", CI: "fr", ML: "fr",
+  ES: "es", MX: "es", AR: "es", CO: "es", PE: "es", CL: "es", VE: "es",
+  DE: "de", AT: "de",
+  US: "en", GB: "en", IE: "en", AU: "en", NZ: "en", IN: "en", ZA: "en", NG: "en",
+};
+const suggestLang = (code: string): "ar" | "fr" | "en" | "es" | "de" => LANG_BY_COUNTRY[code] || "en";
 
 const flagEmoji = (code: string) =>
   code
@@ -50,13 +55,13 @@ export const useGeoLocation = () => {
 
     const fallback = (): GeoInfo => {
       const browserLang = navigator.language?.toLowerCase() || "fr";
-      const isAr = browserLang.startsWith("ar");
-      const code = isAr ? "MA" : browserLang.includes("-") ? browserLang.split("-")[1].toUpperCase() : "MA";
+      const code = browserLang.includes("-") ? browserLang.split("-")[1].toUpperCase() : "MA";
+      const sl = suggestLang(code);
       return {
         country: code,
-        countryName: countryName(code, isAr ? "ar" : "fr"),
+        countryName: countryName(code, sl),
         flag: flagEmoji(code),
-        suggestedLang: isAr ? "ar" : "fr",
+        suggestedLang: sl,
       };
     };
 
@@ -66,12 +71,13 @@ export const useGeoLocation = () => {
         if (!res.ok) throw new Error("geo failed");
         const data = await res.json();
         const code: string = (data.country_code || "MA").toUpperCase();
+        const sl = suggestLang(code);
         const info: GeoInfo = {
           country: code,
-          countryName: countryName(code, ARABIC_COUNTRIES.has(code) ? "ar" : "fr"),
+          countryName: countryName(code, sl),
           flag: flagEmoji(code),
           city: data.city,
-          suggestedLang: ARABIC_COUNTRIES.has(code) ? "ar" : "fr",
+          suggestedLang: sl,
         };
         if (cancelled) return;
         localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), data: info }));
