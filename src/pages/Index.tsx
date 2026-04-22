@@ -9,14 +9,16 @@ import {
 } from 'lucide-react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
-import PropertyCard from '@/components/PropertyCard';
-import { mockProperties, cities } from '@/lib/data';
+import DbPropertyCard from '@/components/DbPropertyCard';
+import { useProperties } from '@/hooks/useProperties';
+import { cities } from '@/lib/data';
 import heroFuture from '@/assets/hero-future.jpg';
 
 const Index = () => {
   const { t, lang } = useLanguage();
   const isAr = lang === 'ar';
-  const featuredProperties = mockProperties.filter((p) => p.isFeatured).slice(0, 6);
+  const { data: allProps = [] } = useProperties();
+  const featuredProperties = allProps.filter((p) => p.featured).slice(0, 6);
   const [tab, setTab] = useState<'sale' | 'rent'>('sale');
 
   // Parallax mouse tracking
@@ -439,7 +441,7 @@ const Index = () => {
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredProperties.map((p, i) => (
-              <PropertyCard key={p.id} property={p} index={i} />
+              <DbPropertyCard key={p.id} property={p} index={i} />
             ))}
           </div>
         </div>

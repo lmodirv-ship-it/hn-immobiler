@@ -1,27 +1,36 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { mockProperties, cities } from '@/lib/data';
-import PropertyCard from '@/components/PropertyCard';
+import { useProperties } from '@/hooks/useProperties';
+import DbPropertyCard from '@/components/DbPropertyCard';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
+import { Search, SlidersHorizontal, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { MOROCCAN_CITIES, PROPERTY_TYPES } from '@/lib/property-helpers';
 
 const PropertyList = () => {
   const { t, lang } = useLanguage();
-  const [typeFilter, setTypeFilter] = useState<string>('all');
-  const [cityFilter, setCityFilter] = useState<string>('all');
-  const [transactionFilter, setTransactionFilter] = useState<string>('all');
+  const [transaction, setTransaction] = useState<'all' | 'sale' | 'rent'>('all');
+  const [propertyType, setPropertyType] = useState<string>('all');
+  const [city, setCity] = useState<string>('all');
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 10000000]);
+  const [minRooms, setMinRooms] = useState<number>(0);
   const [showFilters, setShowFilters] = useState(false);
 
-  const filtered = useMemo(() => {
-    return mockProperties.filter((p) => {
-      if (typeFilter !== 'all' && p.propertyType !== typeFilter) return false;
-      if (cityFilter !== 'all' && p.city !== cityFilter) return false;
-      if (transactionFilter !== 'all' && p.type !== transactionFilter) return false;
-      return true;
-    });
-  }, [typeFilter, cityFilter, transactionFilter]);
+  const { data: properties = [], isLoading } = useProperties({
+    transaction,
+    propertyType,
+    city,
+    minPrice: priceRange[0] || undefined,
+    maxPrice: priceRange[1] < 10000000 ? priceRange[1] : undefined,
+    minRooms: minRooms || undefined,
+  });
+
+  const reset = () => {
+    setTransaction('all'); setPropertyType('all'); setCity('all');
+    setPriceRange([0, 10000000]); setMinRooms(0);
+  };
 
   return (
     <div className="container py-10">
@@ -30,27 +39,19 @@ const PropertyList = () => {
           <span className="text-gradient-cyber">{t.nav.properties}</span>
         </h1>
         <p className="text-muted-foreground mt-1">
-          {filtered.length} {lang === 'ar' ? 'عقار متوفر' : 'biens disponibles'}
+          {properties.length} {lang === 'ar' ? 'عقار متوفر' : 'biens disponibles'}
         </p>
       </motion.div>
 
-      {/* Filters */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-8">
-        <Button
-          variant="outline"
-          className="md:hidden mb-4 gap-2 glow-border"
-          onClick={() => setShowFilters(!showFilters)}
-        >
-          <SlidersHorizontal className="h-4 w-4" />
-          Filtres
+        <Button variant="outline" className="md:hidden mb-4 gap-2 glow-border" onClick={() => setShowFilters(!showFilters)}>
+          <SlidersHorizontal className="h-4 w-4" /> {lang === 'ar' ? 'الفلاتر' : 'Filtres'}
         </Button>
 
         <div className={`glass rounded-xl p-4 glow-border ${showFilters ? '' : 'hidden md:block'}`}>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-            <Select value={transactionFilter} onValueChange={setTransactionFilter}>
-              <SelectTrigger className="bg-secondary/50 border-border/50">
-                <SelectValue />
-              </SelectTrigger>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+            <Select value={transaction} onValueChange={(v: any) => setTransaction(v)}>
+              <SelectTrigger className="bg-secondary/50 border-border/50"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">{lang === 'ar' ? 'بيع وكراء' : 'Vente & Location'}</SelectItem>
                 <SelectItem value="sale">{t.property.sale}</SelectItem>
@@ -58,50 +59,61 @@ const PropertyList = () => {
               </SelectContent>
             </Select>
 
-            <Select value={typeFilter} onValueChange={setTypeFilter}>
-              <SelectTrigger className="bg-secondary/50 border-border/50">
-                <SelectValue />
-              </SelectTrigger>
+            <Select value={propertyType} onValueChange={setPropertyType}>
+              <SelectTrigger className="bg-secondary/50 border-border/50"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">{t.search.allTypes}</SelectItem>
-                <SelectItem value="apartment">{t.property.apartment}</SelectItem>
-                <SelectItem value="villa">{t.property.villa}</SelectItem>
-                <SelectItem value="house">{t.property.house}</SelectItem>
-                <SelectItem value="land">{t.property.land}</SelectItem>
-                <SelectItem value="commercial">{t.property.commercial}</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={cityFilter} onValueChange={setCityFilter}>
-              <SelectTrigger className="bg-secondary/50 border-border/50">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{t.search.allCities}</SelectItem>
-                {cities.map((c) => (
-                  <SelectItem key={c.fr} value={c.fr}>
-                    {lang === 'ar' ? c.ar : c.fr}
+                {PROPERTY_TYPES.map((pt) => (
+                  <SelectItem key={pt} value={pt}>
+                    {(t.property as any)[pt] ?? pt}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
 
-            <Button
-              variant="ghost"
-              className="text-muted-foreground hover:text-primary"
-              onClick={() => { setTypeFilter('all'); setCityFilter('all'); setTransactionFilter('all'); }}
-            >
-              {lang === 'ar' ? 'إعادة تعيين' : 'Réinitialiser'}
-            </Button>
+            <Select value={city} onValueChange={setCity}>
+              <SelectTrigger className="bg-secondary/50 border-border/50"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t.search.allCities}</SelectItem>
+                {MOROCCAN_CITIES.map((c) => (
+                  <SelectItem key={c} value={c}>{c}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={String(minRooms)} onValueChange={(v) => setMinRooms(Number(v))}>
+              <SelectTrigger className="bg-secondary/50 border-border/50"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="0">{lang === 'ar' ? 'كل الغرف' : 'Toutes pièces'}</SelectItem>
+                {[1,2,3,4,5].map((n) => (
+                  <SelectItem key={n} value={String(n)}>{n}+ {t.property.rooms}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="px-2 py-3">
+            <div className="flex justify-between text-xs text-muted-foreground mb-2">
+              <span>{lang === 'ar' ? 'السعر' : 'Prix'}: {priceRange[0].toLocaleString()} - {priceRange[1].toLocaleString()} MAD</span>
+              <button onClick={reset} className="text-primary hover:underline">{lang === 'ar' ? 'إعادة تعيين' : 'Réinitialiser'}</button>
+            </div>
+            <Slider
+              value={priceRange}
+              onValueChange={(v) => setPriceRange(v as [number, number])}
+              min={0}
+              max={10000000}
+              step={50000}
+              className="mt-2"
+            />
           </div>
         </div>
       </motion.div>
 
-      {filtered.length > 0 ? (
+      {isLoading ? (
+        <div className="flex justify-center py-20"><Loader2 className="h-10 w-10 animate-spin text-primary" /></div>
+      ) : properties.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((p, i) => (
-            <PropertyCard key={p.id} property={p} index={i} />
-          ))}
+          {properties.map((p, i) => <DbPropertyCard key={p.id} property={p} index={i} />)}
         </div>
       ) : (
         <div className="text-center py-20 glass rounded-2xl glow-border">
