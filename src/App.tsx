@@ -21,6 +21,7 @@ import Dashboard from "./pages/Dashboard";
 import Favorites from "./pages/Favorites";
 import MyProperties from "./pages/MyProperties";
 import NewProperty from "./pages/NewProperty";
+import MapView from "./pages/MapView";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
                   <Route path="/" element={<Index />} />
                   <Route path="/properties" element={<PropertyList />} />
                   <Route path="/properties/:id" element={<PropertyDetail />} />
+                  <Route path="/map" element={<MapView />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/simulator" element={<MortgageSimulator />} />

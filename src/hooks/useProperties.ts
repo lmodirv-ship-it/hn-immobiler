@@ -9,6 +9,7 @@ export interface PropertyFilters {
   minPrice?: number;
   maxPrice?: number;
   minRooms?: number;
+  amenities?: string[]; // e.g. ['has_pool','has_elevator','furnished']
 }
 
 export function useProperties(filters: PropertyFilters = {}) {
@@ -17,7 +18,7 @@ export function useProperties(filters: PropertyFilters = {}) {
     queryFn: async () => {
       let q = supabase
         .from('properties')
-        .select('*, property_images(*)')
+        .select('*, property_images(*), property_features(*)')
         .eq('status', 'active')
         .order('featured', { ascending: false })
         .order('published_at', { ascending: false });
@@ -31,7 +32,16 @@ export function useProperties(filters: PropertyFilters = {}) {
 
       const { data, error } = await q;
       if (error) throw error;
-      return (data || []) as PropertyWithImages[];
+      let rows = (data || []) as any[];
+      // Client-side amenity filter (PostgREST nested filtering is limited)
+      if (filters.amenities && filters.amenities.length > 0) {
+        rows = rows.filter((r) => {
+          const feat = r.property_features;
+          if (!feat) return false;
+          return filters.amenities!.every((a) => feat[a] === true);
+        });
+      }
+      return rows as PropertyWithImages[];
     },
   });
 }
