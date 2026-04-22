@@ -3,12 +3,12 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, MessageSquare, Calendar, Building2, Plus, LogOut } from 'lucide-react';
+import { Heart, MessageSquare, Calendar, Building2, Plus, LogOut, CreditCard, ShieldCheck } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
 const Dashboard = () => {
-  const { user, signOut, isOwner } = useAuth();
+  const { user, signOut, isOwner, isAdmin } = useAuth();
   const { lang } = useLanguage();
   const t = (fr: string, ar: string) => (lang === 'ar' ? ar : fr);
 
@@ -79,6 +79,25 @@ const Dashboard = () => {
           <Link to="/dashboard/properties/new"><Button variant="outline" className="glow-border">{t('Publier un bien', 'نشر عقار')}</Button></Link>
         </div>
       )}
+
+      <div className="mt-6 grid md:grid-cols-2 gap-4">
+        <Link to="/pricing" className="glass rounded-xl p-5 glow-border hover:scale-[1.01] transition-transform flex items-center gap-4">
+          <CreditCard className="h-8 w-8 text-accent" />
+          <div className="flex-1">
+            <div className="font-display font-bold">{t('Abonnements & Tarifs', 'الاشتراكات والأسعار')}</div>
+            <div className="text-xs text-muted-foreground">{t('Choisir ou changer de plan', 'اختر أو غيّر الباقة')}</div>
+          </div>
+        </Link>
+        {isAdmin && (
+          <Link to="/admin/payments" className="glass rounded-xl p-5 glow-border hover:scale-[1.01] transition-transform flex items-center gap-4">
+            <ShieldCheck className="h-8 w-8 text-primary" />
+            <div className="flex-1">
+              <div className="font-display font-bold">{t('Admin — Paiements', 'الإدارة — المدفوعات')}</div>
+              <div className="text-xs text-muted-foreground">{t('Valider les paiements manuels', 'تحقق من المدفوعات اليدوية')}</div>
+            </div>
+          </Link>
+        )}
+      </div>
     </div>
   );
 };
