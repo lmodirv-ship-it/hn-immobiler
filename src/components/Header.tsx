@@ -15,6 +15,7 @@ const Header = () => {
   const navItems = [
     { to: '/', label: t.nav.home },
     { to: '/properties', label: t.nav.properties },
+    { to: '/map', label: lang === 'ar' ? 'الخريطة' : 'Carte' },
     { to: '/simulator', label: lang === 'ar' ? 'محاكي القرض' : 'Simulateur' },
     { to: '/blog', label: 'Blog' },
     { to: '/about', label: t.nav.about },
