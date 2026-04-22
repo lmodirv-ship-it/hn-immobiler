@@ -13,6 +13,8 @@ import DbPropertyCard from '@/components/DbPropertyCard';
 import { useProperties } from '@/hooks/useProperties';
 import { cities } from '@/lib/data';
 import heroFuture from '@/assets/hero-future.jpg';
+import SEO from '@/components/SEO';
+import NewsletterCTA from '@/components/NewsletterCTA';
 
 const Index = () => {
   const { t, lang } = useLanguage();
@@ -619,6 +621,8 @@ const Index = () => {
           </motion.div>
         </div>
       </section>
+
+      <NewsletterCTA />
     </div>
   );
 };
