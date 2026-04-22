@@ -149,6 +149,6 @@ export function formatPrice(price: number, type: 'sale' | 'rent', lang: string):
   const suffixMap: Record<string, string> = { ar: '/شهر', fr: '/mois', en: '/month', es: '/mes', de: '/Monat' };
   const formatted = new Intl.NumberFormat(localeMap[lang] || 'fr-MA').format(price);
   const currency = lang === 'ar' ? 'درهم' : 'DH';
-  const perMonth = type === 'rent' ? (lang === 'fr' ? '/mois' : '/شهر') : '';
+  const perMonth = type === 'rent' ? (suffixMap[lang] || '/mois') : '';
   return `${formatted} ${currency}${perMonth}`;
 }
