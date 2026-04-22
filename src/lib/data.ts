@@ -144,9 +144,11 @@ export const mockProperties: Property[] = [
   },
 ];
 
-export function formatPrice(price: number, type: 'sale' | 'rent', lang: 'fr' | 'ar'): string {
-  const formatted = new Intl.NumberFormat(lang === 'fr' ? 'fr-MA' : 'ar-MA').format(price);
-  const currency = lang === 'fr' ? 'DH' : 'درهم';
-  const perMonth = type === 'rent' ? (lang === 'fr' ? '/mois' : '/شهر') : '';
+export function formatPrice(price: number, type: 'sale' | 'rent', lang: string): string {
+  const localeMap: Record<string, string> = { ar: 'ar-MA', fr: 'fr-MA', en: 'en-US', es: 'es-ES', de: 'de-DE' };
+  const suffixMap: Record<string, string> = { ar: '/شهر', fr: '/mois', en: '/month', es: '/mes', de: '/Monat' };
+  const formatted = new Intl.NumberFormat(localeMap[lang] || 'fr-MA').format(price);
+  const currency = lang === 'ar' ? 'درهم' : 'DH';
+  const perMonth = type === 'rent' ? (suffixMap[lang] || '/mois') : '';
   return `${formatted} ${currency}${perMonth}`;
 }

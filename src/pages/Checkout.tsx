@@ -13,12 +13,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { PAYMENT_METHODS, type PaymentMethodKey } from "@/lib/payment-methods";
 import SEO from "@/components/SEO";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 const Checkout = () => {
   const { planId } = useParams();
   const nav = useNavigate();
   const { user } = useAuth();
   const { lang } = useLanguage();
+  const { format, currency: userCurrency } = useCurrency();
   const t = (fr: string, ar: string) => (lang === "ar" ? ar : fr);
 
   const [selected, setSelected] = useState<PaymentMethodKey | null>(null);
@@ -344,9 +346,14 @@ const Checkout = () => {
               <div className="border-t border-border/50 pt-3 flex justify-between items-baseline">
                 <span className="text-sm">{t("Total", "المجموع")}</span>
                 <span className="font-display text-2xl font-bold text-gradient-cyber">
-                  {Number(plan.price).toLocaleString()} {plan.currency}
+                  {format(Number(plan.price))}
                 </span>
               </div>
+              {userCurrency !== "MAD" && (
+                <div className="text-xs text-muted-foreground mt-2 text-end">
+                  {t("Facturé en", "يُفوتر بـ")} {Number(plan.price).toLocaleString()} MAD
+                </div>
+              )}
             </div>
           </aside>
         </div>

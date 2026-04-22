@@ -28,10 +28,17 @@ Deno.serve(async (req) => {
 
     const staticRoutes = [
       "", "/properties", "/map", "/about", "/contact",
-      "/simulator", "/blog", "/auth",
+      "/simulator", "/blog", "/auth", "/pricing",
     ];
+    const LANGS = ["fr", "ar", "en", "es", "de"];
 
     const now = new Date().toISOString();
+
+    const buildAlternates = (path: string) =>
+      LANGS.map(
+        (l) => `    <xhtml:link rel="alternate" hreflang="${l}" href="${SITE}${path}" />`,
+      ).join("\n") +
+      `\n    <xhtml:link rel="alternate" hreflang="x-default" href="${SITE}${path}" />`;
 
     const urls = [
       ...staticRoutes.map(
@@ -40,7 +47,8 @@ Deno.serve(async (req) => {
   <lastmod>${now}</lastmod>
   <changefreq>daily</changefreq>
   <priority>${r === "" ? "1.0" : "0.8"}</priority>
-</url>`
+${buildAlternates(r)}
+</url>`,
       ),
       ...(properties || []).map(
         (p: any) => `<url>
@@ -48,12 +56,13 @@ Deno.serve(async (req) => {
   <lastmod>${new Date(p.updated_at).toISOString()}</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.9</priority>
-</url>`
+${buildAlternates(`/properties/${p.id}`)}
+</url>`,
       ),
     ].join("\n");
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urls}
 </urlset>`;
 

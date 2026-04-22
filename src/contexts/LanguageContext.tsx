@@ -17,6 +17,19 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setLangState(newLang);
     document.documentElement.lang = newLang;
     document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
+    try { localStorage.setItem('hn_lang', newLang); } catch {}
+  }, []);
+
+  // Restore saved language on mount
+  React.useEffect(() => {
+    try {
+      const saved = localStorage.getItem('hn_lang') as Lang | null;
+      if (saved && translations[saved]) {
+        setLangState(saved);
+        document.documentElement.lang = saved;
+        document.documentElement.dir = saved === 'ar' ? 'rtl' : 'ltr';
+      }
+    } catch {}
   }, []);
 
   const dir = lang === 'ar' ? 'rtl' : 'ltr';

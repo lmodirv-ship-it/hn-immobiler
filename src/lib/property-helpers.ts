@@ -7,10 +7,16 @@ export type PropertyWithImages = DbProperty & {
   property_images: DbImage[];
 };
 
-export function formatPriceDb(price: number, transaction: 'sale' | 'rent', lang: 'fr' | 'ar'): string {
-  const formatted = new Intl.NumberFormat(lang === 'ar' ? 'ar-MA' : 'fr-MA').format(price);
+export function formatPriceDb(price: number, transaction: 'sale' | 'rent', lang: string): string {
+  const localeMap: Record<string, string> = {
+    ar: 'ar-MA', fr: 'fr-MA', en: 'en-US', es: 'es-ES', de: 'de-DE',
+  };
+  const suffixMap: Record<string, string> = {
+    ar: '/شهر', fr: '/mois', en: '/month', es: '/mes', de: '/Monat',
+  };
+  const formatted = new Intl.NumberFormat(localeMap[lang] || 'fr-MA').format(price);
   const currency = lang === 'ar' ? 'درهم' : 'MAD';
-  const suffix = transaction === 'rent' ? (lang === 'ar' ? '/شهر' : '/mois') : '';
+  const suffix = transaction === 'rent' ? (suffixMap[lang] || '/mois') : '';
   return `${formatted} ${currency}${suffix}`;
 }
 

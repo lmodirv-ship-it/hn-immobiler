@@ -1,4 +1,4 @@
-export type Lang = 'fr' | 'ar';
+export type Lang = 'fr' | 'ar' | 'en' | 'es' | 'de';
 
 export const translations = {
   fr: {
@@ -169,6 +169,143 @@ export const translations = {
       quickLinks: 'روابط سريعة',
       contactInfo: 'معلومات الاتصال',
       rights: '© 2026 HN Immobilier. جميع الحقوق محفوظة.',
+    },
+  },
+  en: {
+    nav: {
+      home: 'Home',
+      properties: 'Properties',
+      about: 'About',
+      contact: 'Contact',
+      login: 'Login',
+      dashboard: 'Dashboard',
+    },
+    hero: {
+      title: 'Find your ideal property in Morocco',
+      subtitle: 'Buy and rent apartments, villas and land in the best cities of the Kingdom',
+      cta: 'Browse properties',
+    },
+    search: {
+      city: 'City',
+      type: 'Property type',
+      priceMin: 'Min price',
+      priceMax: 'Max price',
+      search: 'Search',
+      allCities: 'All cities',
+      allTypes: 'All types',
+    },
+    property: {
+      sale: 'For sale', rent: 'For rent', apartment: 'Apartment', villa: 'Villa',
+      house: 'House', land: 'Land', commercial: 'Commercial', rooms: 'rooms',
+      surface: 'm²', price: 'MAD', perMonth: '/month', featured: 'Featured',
+      premium: 'Premium', details: 'View details', description: 'Description',
+      characteristics: 'Features', location: 'Location', contactOwner: 'Contact owner',
+    },
+    featured: {
+      title: 'Featured properties',
+      subtitle: 'Discover our selection of exceptional real estate',
+    },
+    cta: {
+      title: 'Have a property to sell or rent?',
+      subtitle: 'Post your listing for free and reach thousands of potential buyers',
+      button: 'Post a listing',
+    },
+    contact: {
+      title: 'Contact us', subtitle: 'Our team is here to answer your questions',
+      name: 'Full name', email: 'Email', phone: 'Phone', message: 'Message',
+      send: 'Send', address: 'Address', addressValue: 'Casablanca, Morocco',
+      phoneValue: '+212 5XX-XXXXXX', emailValue: 'contact@hn-immobilier.ma',
+    },
+    about: {
+      title: 'About HN Immobilier',
+      subtitle: 'Your trusted real estate partner in Morocco',
+      mission: 'Our Mission',
+      missionText: 'HN Immobilier is a modern real estate agency facilitating property sales and rentals across Morocco. We connect owners and buyers through a transparent and professional platform.',
+      values: 'Our Values', trust: 'Trust',
+      trustText: 'Total transparency in all our transactions',
+      quality: 'Quality', qualityText: 'Rigorous selection of properties',
+      service: 'Service', serviceText: 'Personalized support at every step',
+    },
+    footer: {
+      description: 'Your trusted real estate agency in Morocco. Property sales and rentals.',
+      quickLinks: 'Quick links', contactInfo: 'Contact',
+      rights: '© 2026 HN Immobilier. All rights reserved.',
+    },
+  },
+  es: {
+    nav: { home: 'Inicio', properties: 'Propiedades', about: 'Nosotros', contact: 'Contacto', login: 'Acceder', dashboard: 'Panel' },
+    hero: {
+      title: 'Encuentra tu propiedad ideal en Marruecos',
+      subtitle: 'Compra y alquiler de apartamentos, villas y terrenos en las mejores ciudades del Reino',
+      cta: 'Ver propiedades',
+    },
+    search: { city: 'Ciudad', type: 'Tipo', priceMin: 'Precio mín', priceMax: 'Precio máx', search: 'Buscar', allCities: 'Todas las ciudades', allTypes: 'Todos los tipos' },
+    property: {
+      sale: 'Venta', rent: 'Alquiler', apartment: 'Apartamento', villa: 'Villa',
+      house: 'Casa', land: 'Terreno', commercial: 'Comercial', rooms: 'habitaciones',
+      surface: 'm²', price: 'MAD', perMonth: '/mes', featured: 'Destacado',
+      premium: 'Premium', details: 'Ver detalles', description: 'Descripción',
+      characteristics: 'Características', location: 'Ubicación', contactOwner: 'Contactar propietario',
+    },
+    featured: { title: 'Propiedades destacadas', subtitle: 'Descubre nuestra selección de inmuebles excepcionales' },
+    cta: { title: '¿Tienes una propiedad para vender o alquilar?', subtitle: 'Publica tu anuncio gratis y llega a miles de compradores', button: 'Publicar anuncio' },
+    contact: {
+      title: 'Contáctanos', subtitle: 'Nuestro equipo está aquí para responder tus preguntas',
+      name: 'Nombre completo', email: 'Correo', phone: 'Teléfono', message: 'Mensaje',
+      send: 'Enviar', address: 'Dirección', addressValue: 'Casablanca, Marruecos',
+      phoneValue: '+212 5XX-XXXXXX', emailValue: 'contact@hn-immobilier.ma',
+    },
+    about: {
+      title: 'Sobre HN Immobilier', subtitle: 'Tu socio inmobiliario de confianza en Marruecos',
+      mission: 'Nuestra Misión',
+      missionText: 'HN Immobilier es una agencia inmobiliaria moderna que facilita la venta y el alquiler de propiedades en Marruecos.',
+      values: 'Nuestros Valores', trust: 'Confianza',
+      trustText: 'Transparencia total en todas nuestras transacciones',
+      quality: 'Calidad', qualityText: 'Selección rigurosa de inmuebles',
+      service: 'Servicio', serviceText: 'Acompañamiento personalizado en cada etapa',
+    },
+    footer: {
+      description: 'Tu agencia inmobiliaria de confianza en Marruecos.',
+      quickLinks: 'Enlaces rápidos', contactInfo: 'Contacto',
+      rights: '© 2026 HN Immobilier. Todos los derechos reservados.',
+    },
+  },
+  de: {
+    nav: { home: 'Start', properties: 'Immobilien', about: 'Über uns', contact: 'Kontakt', login: 'Anmelden', dashboard: 'Dashboard' },
+    hero: {
+      title: 'Finden Sie Ihre Traumimmobilie in Marokko',
+      subtitle: 'Kauf und Miete von Wohnungen, Villen und Grundstücken in den besten Städten des Königreichs',
+      cta: 'Immobilien ansehen',
+    },
+    search: { city: 'Stadt', type: 'Typ', priceMin: 'Min. Preis', priceMax: 'Max. Preis', search: 'Suchen', allCities: 'Alle Städte', allTypes: 'Alle Typen' },
+    property: {
+      sale: 'Verkauf', rent: 'Miete', apartment: 'Wohnung', villa: 'Villa',
+      house: 'Haus', land: 'Grundstück', commercial: 'Gewerbe', rooms: 'Zimmer',
+      surface: 'm²', price: 'MAD', perMonth: '/Monat', featured: 'Hervorgehoben',
+      premium: 'Premium', details: 'Details anzeigen', description: 'Beschreibung',
+      characteristics: 'Ausstattung', location: 'Lage', contactOwner: 'Eigentümer kontaktieren',
+    },
+    featured: { title: 'Hervorgehobene Immobilien', subtitle: 'Entdecken Sie unsere Auswahl außergewöhnlicher Immobilien' },
+    cta: { title: 'Haben Sie eine Immobilie zu verkaufen oder zu vermieten?', subtitle: 'Inserieren Sie kostenlos und erreichen Sie Tausende potenzieller Käufer', button: 'Anzeige aufgeben' },
+    contact: {
+      title: 'Kontaktieren Sie uns', subtitle: 'Unser Team steht Ihnen für Ihre Fragen zur Verfügung',
+      name: 'Vollständiger Name', email: 'E-Mail', phone: 'Telefon', message: 'Nachricht',
+      send: 'Senden', address: 'Adresse', addressValue: 'Casablanca, Marokko',
+      phoneValue: '+212 5XX-XXXXXX', emailValue: 'contact@hn-immobilier.ma',
+    },
+    about: {
+      title: 'Über HN Immobilier', subtitle: 'Ihr vertrauenswürdiger Immobilienpartner in Marokko',
+      mission: 'Unsere Mission',
+      missionText: 'HN Immobilier ist eine moderne Immobilienagentur, die den Verkauf und die Vermietung von Immobilien in Marokko erleichtert.',
+      values: 'Unsere Werte', trust: 'Vertrauen',
+      trustText: 'Volle Transparenz in allen Transaktionen',
+      quality: 'Qualität', qualityText: 'Sorgfältige Auswahl der Immobilien',
+      service: 'Service', serviceText: 'Persönliche Betreuung bei jedem Schritt',
+    },
+    footer: {
+      description: 'Ihre vertrauenswürdige Immobilienagentur in Marokko.',
+      quickLinks: 'Schnelllinks', contactInfo: 'Kontakt',
+      rights: '© 2026 HN Immobilier. Alle Rechte vorbehalten.',
     },
   },
 } as const;
