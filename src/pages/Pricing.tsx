@@ -7,6 +7,8 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import SEO from "@/components/SEO";
+import { useCurrency } from "@/contexts/CurrencyContext";
+import { CURRENCIES } from "@/lib/currencies";
 
 const planIcons: Record<string, typeof Sparkles> = {
   basic: Sparkles,
@@ -17,6 +19,7 @@ const planIcons: Record<string, typeof Sparkles> = {
 const Pricing = () => {
   const { lang } = useLanguage();
   const { user } = useAuth();
+  const { format, currency } = useCurrency();
   const t = (fr: string, ar: string) => (lang === "ar" ? ar : fr);
 
   const { data: plans, isLoading } = useQuery({
@@ -91,12 +94,17 @@ const Pricing = () => {
                   </h3>
                   <div className="flex items-baseline gap-1 mb-6">
                     <span className="font-display text-4xl font-bold text-gradient-cyber">
-                      {Number(plan.price).toLocaleString()}
+                      {format(Number(plan.price))}
                     </span>
                     <span className="text-muted-foreground text-sm">
-                      {plan.currency} / {t("mois", "شهر")}
+                      / {t("mois", "شهر")}
                     </span>
                   </div>
+                  {currency !== "MAD" && (
+                    <div className="text-xs text-muted-foreground mb-4 -mt-4">
+                      ≈ {Number(plan.price).toLocaleString()} MAD
+                    </div>
+                  )}
                   <ul className="space-y-3 mb-7">
                     {features.map((f, j) => (
                       <li key={j} className="flex items-start gap-2 text-sm">
