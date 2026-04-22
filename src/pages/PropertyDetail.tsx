@@ -111,6 +111,30 @@ const PropertyDetail = () => {
 
   const waLink = `https://wa.me/${ownerPhone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(form.message || title)}`;
 
+  const toggleCmp = async () => {
+    if (!user) { navigate('/auth'); return; }
+    if (isCmp) {
+      await supabase.from('comparisons').delete().eq('user_id', user.id).eq('property_id', property.id);
+      setIsCmp(false);
+      toast({ title: lang === 'ar' ? 'أُزيل من المقارنة' : 'Retiré de la comparaison' });
+    } else {
+      await supabase.from('comparisons').insert({ user_id: user.id, property_id: property.id });
+      setIsCmp(true);
+      toast({ title: lang === 'ar' ? 'أُضيف للمقارنة' : 'Ajouté à la comparaison' });
+    }
+  };
+
+  const sendInternalMessage = async () => {
+    if (!user) { navigate('/auth'); return; }
+    if (user.id === property.owner_id) { toast({ title: lang === 'ar' ? 'أنت المالك' : 'Vous êtes le propriétaire', variant: 'destructive' }); return; }
+    const content = form.message || title;
+    const { error } = await supabase.from('messages').insert({
+      sender_id: user.id, recipient_id: property.owner_id, content, property_id: property.id,
+    });
+    if (error) toast({ title: lang === 'ar' ? 'حدث خطأ' : 'Erreur', variant: 'destructive' });
+    else { toast({ title: lang === 'ar' ? 'تم إرسال الرسالة' : 'Message envoyé' }); navigate('/dashboard/messages'); }
+  };
+
   return (
     <div className="container py-10">
       <Link to="/properties" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
