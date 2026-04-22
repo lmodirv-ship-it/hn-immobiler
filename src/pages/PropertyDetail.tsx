@@ -17,7 +17,7 @@ import { z } from 'zod';
 const contactSchema = z.object({
   sender_name: z.string().trim().min(2).max(100),
   sender_email: z.string().trim().email().max(255),
-  sender_phone: z.string().trim().max(40).optional(),
+  sender_phone: z.string().trim().max(40),
   message: z.string().trim().min(5).max(1000),
 });
 
@@ -88,7 +88,14 @@ const PropertyDetail = () => {
       return;
     }
     setSubmitting(true);
-    const { error } = await supabase.from('contact_requests').insert([{ ...parsed.data, property_id: property.id }]);
+    const payload = {
+      sender_name: parsed.data.sender_name,
+      sender_email: parsed.data.sender_email,
+      sender_phone: parsed.data.sender_phone || null,
+      message: parsed.data.message,
+      property_id: property.id,
+    };
+    const { error } = await supabase.from('contact_requests').insert(payload);
     setSubmitting(false);
     if (error) {
       toast({ title: lang === 'ar' ? 'حدث خطأ' : 'Erreur lors de l\'envoi', variant: 'destructive' });
