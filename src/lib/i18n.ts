@@ -83,7 +83,7 @@ export const translations = {
       description: 'Votre agence immobilière de confiance au Maroc. Vente et location de biens immobiliers.',
       quickLinks: 'Liens rapides',
       contactInfo: 'Contact',
-      rights: '© 2026 HN Immobilier. Tous droits réservés.',
+      rights: '© 2026 HN Immobilier. Tous droits réservés — El Hassani Moulay Ismail.',
     },
   },
   ar: {
@@ -168,7 +168,7 @@ export const translations = {
       description: 'وكالتكم العقارية الموثوقة في المغرب. بيع وكراء العقارات.',
       quickLinks: 'روابط سريعة',
       contactInfo: 'معلومات الاتصال',
-      rights: '© 2026 HN Immobilier. جميع الحقوق محفوظة.',
+      rights: '© 2026 HN Immobilier. جميع الحقوق محفوظة — الحسني مولاي إسماعيل.',
     },
   },
   en: {
@@ -229,7 +229,7 @@ export const translations = {
     footer: {
       description: 'Your trusted real estate agency in Morocco. Property sales and rentals.',
       quickLinks: 'Quick links', contactInfo: 'Contact',
-      rights: '© 2026 HN Immobilier. All rights reserved.',
+      rights: '© 2026 HN Immobilier. All rights reserved — El Hassani Moulay Ismail.',
     },
   },
   es: {
@@ -267,7 +267,7 @@ export const translations = {
     footer: {
       description: 'Tu agencia inmobiliaria de confianza en Marruecos.',
       quickLinks: 'Enlaces rápidos', contactInfo: 'Contacto',
-      rights: '© 2026 HN Immobilier. Todos los derechos reservados.',
+      rights: '© 2026 HN Immobilier. Todos los derechos reservados — El Hassani Moulay Ismail.',
     },
   },
   de: {
@@ -305,7 +305,7 @@ export const translations = {
     footer: {
       description: 'Ihre vertrauenswürdige Immobilienagentur in Marokko.',
       quickLinks: 'Schnelllinks', contactInfo: 'Kontakt',
-      rights: '© 2026 HN Immobilier. Alle Rechte vorbehalten.',
+      rights: '© 2026 HN Immobilier. Alle Rechte vorbehalten — El Hassani Moulay Ismail.',
     },
   },
 } as const;
