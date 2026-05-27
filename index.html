@@ -32,6 +32,26 @@
   <meta property="og:locale:alternate" content="es_ES">
   <meta property="og:locale:alternate" content="de_DE">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3443455318197857" crossorigin="anonymous"></script>
+    <!-- HN SSO + Data + Storage -->
+    <script src="https://hn-bd.online/hn-data.js"></script>
+    <script src="https://hn-bd.online/hn-sso.js"></script>
+    <script src="https://hn-bd.online/hn-storage.js"></script>
+    <script>
+      (function(){
+        var API_KEY = "hn_live_f392cfbf_6xHl7cCSM8pbBX23OiscWRSCBKl2Xcqy";
+        var BASE = "https://hn-bd.online";
+        function init(){
+          if (!window.HNData || !window.HNSso || !window.HNStorage) { setTimeout(init, 50); return; }
+          window.HN = {
+            db:      HNData.init({    apiKey: API_KEY, baseUrl: BASE }),
+            auth:    HNSso.init({     apiKey: API_KEY, baseUrl: BASE }),
+            storage: HNStorage.init({ apiKey: API_KEY, baseUrl: BASE }),
+          };
+          window.dispatchEvent(new Event("hn-ready"));
+        }
+        init();
+      })();
+    </script>
 </head>
 
   <body>
