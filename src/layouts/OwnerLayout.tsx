@@ -3,10 +3,14 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { OwnerSidebar } from '@/components/owner/OwnerSidebar';
 import { useAuth } from '@/hooks/useAuth';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useOwnerNotifications } from '@/hooks/useOwnerNotifications';
+import { useUnreadMessages } from '@/hooks/useUnreadMessages';
 
 const OwnerLayout = () => {
   const { user, loading, isOwner } = useAuth();
   const { lang } = useLanguage();
+  useOwnerNotifications(user?.id);
+  useUnreadMessages(user?.id);
 
   if (loading) {
     return (
