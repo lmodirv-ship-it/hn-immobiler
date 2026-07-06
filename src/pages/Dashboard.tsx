@@ -3,9 +3,10 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, MessageSquare, Calendar, Building2, Plus, LogOut, CreditCard, ShieldCheck } from 'lucide-react';
+import { Heart, MessageSquare, Calendar, Building2, Plus, LogOut, CreditCard, ShieldCheck, CalendarCheck2, BarChart3 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import RoleUpgradeCard from '@/components/RoleUpgradeCard';
 
 const Dashboard = () => {
   const { user, signOut, isOwner, isAdmin } = useAuth();
@@ -31,6 +32,8 @@ const Dashboard = () => {
     { to: '/dashboard/properties', icon: Building2, label: t('Mes biens', 'عقاراتي'), value: stats?.props ?? 0 },
     { to: '/dashboard/messages', icon: MessageSquare, label: t('Messages', 'الرسائل'), value: stats?.msgs ?? 0 },
     { to: '/dashboard/viewings', icon: Calendar, label: t('Visites', 'الزيارات'), value: stats?.views ?? 0 },
+    { to: '/dashboard/bookings', icon: CalendarCheck2, label: t('Réservations', 'الحجوزات'), value: '' },
+    { to: '/dashboard/analytics', icon: BarChart3, label: t('Analytique', 'التحليلات'), value: '' },
   ];
 
   return (
@@ -47,7 +50,7 @@ const Dashboard = () => {
         </Button>
       </motion.div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
         {cards.map((c, i) => (
           <motion.div key={c.to} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
             <Link to={c.to} className="block glass rounded-xl p-5 glow-border hover:scale-[1.02] transition-transform">
@@ -73,11 +76,7 @@ const Dashboard = () => {
           <p className="text-muted-foreground text-sm">{t('Gérez vos annonces, suivez les visites et messages.', 'أدر إعلاناتك وتابع الزيارات والرسائل.')}</p>
         </motion.div>
       ) : (
-        <div className="glass rounded-2xl p-6 glow-border text-center">
-          <Building2 className="h-10 w-10 text-primary mx-auto mb-3" />
-          <p className="text-muted-foreground mb-4">{t('Vous êtes propriétaire ou agence ? Activez le mode propriétaire pour publier vos biens.', 'هل أنت مالك أو وكالة؟ فعّل وضع المالك لنشر عقاراتك.')}</p>
-          <Link to="/dashboard/properties/new"><Button variant="outline" className="glow-border">{t('Publier un bien', 'نشر عقار')}</Button></Link>
-        </div>
+        <RoleUpgradeCard />
       )}
 
       <div className="mt-6 grid md:grid-cols-2 gap-4">
@@ -89,11 +88,11 @@ const Dashboard = () => {
           </div>
         </Link>
         {isAdmin && (
-          <Link to="/admin/payments" className="glass rounded-xl p-5 glow-border hover:scale-[1.01] transition-transform flex items-center gap-4">
+          <Link to="/admin" className="glass rounded-xl p-5 glow-border hover:scale-[1.01] transition-transform flex items-center gap-4">
             <ShieldCheck className="h-8 w-8 text-primary" />
             <div className="flex-1">
-              <div className="font-display font-bold">{t('Admin — Paiements', 'الإدارة — المدفوعات')}</div>
-              <div className="text-xs text-muted-foreground">{t('Valider les paiements manuels', 'تحقق من المدفوعات اليدوية')}</div>
+              <div className="font-display font-bold">{t('Administration', 'لوحة الإدارة')}</div>
+              <div className="text-xs text-muted-foreground">{t('Utilisateurs, biens, réservations…', 'المستخدمون والعقارات والحجوزات…')}</div>
             </div>
           </Link>
         )}
