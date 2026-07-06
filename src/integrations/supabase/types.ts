@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_audit_log: {
+        Row: {
+          action: string
+          admin_id: string
+          created_at: string
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          metadata: Json | null
+        }
+        Insert: {
+          action: string
+          admin_id: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          metadata?: Json | null
+        }
+        Update: {
+          action?: string
+          admin_id?: string
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          metadata?: Json | null
+        }
+        Relationships: []
+      }
       bank_accounts: {
         Row: {
           account_holder: string
@@ -52,6 +82,74 @@ export type Database = {
           swift?: string | null
         }
         Relationships: []
+      }
+      bookings: {
+        Row: {
+          cancellation_reason: string | null
+          check_in: string
+          check_out: string
+          created_at: string
+          currency: string
+          guest_id: string
+          guests: number
+          host_id: string | null
+          id: string
+          nights: number | null
+          payment_status: string
+          price_per_night: number
+          property_id: string
+          special_requests: string | null
+          status: string
+          total_price: number
+          updated_at: string
+        }
+        Insert: {
+          cancellation_reason?: string | null
+          check_in: string
+          check_out: string
+          created_at?: string
+          currency?: string
+          guest_id: string
+          guests?: number
+          host_id?: string | null
+          id?: string
+          nights?: number | null
+          payment_status?: string
+          price_per_night?: number
+          property_id: string
+          special_requests?: string | null
+          status?: string
+          total_price?: number
+          updated_at?: string
+        }
+        Update: {
+          cancellation_reason?: string | null
+          check_in?: string
+          check_out?: string
+          created_at?: string
+          currency?: string
+          guest_id?: string
+          guests?: number
+          host_id?: string | null
+          id?: string
+          nights?: number | null
+          payment_status?: string
+          price_per_night?: number
+          property_id?: string
+          special_requests?: string | null
+          status?: string
+          total_price?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       comparisons: {
         Row: {
@@ -451,6 +549,50 @@ export type Database = {
         }
         Relationships: []
       }
+      property_availability: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          is_available: boolean
+          min_stay: number | null
+          note: string | null
+          price_override: number | null
+          property_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          id?: string
+          is_available?: boolean
+          min_stay?: number | null
+          note?: string | null
+          price_override?: number | null
+          property_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          is_available?: boolean
+          min_stay?: number | null
+          note?: string | null
+          price_override?: number | null
+          property_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_availability_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       property_features: {
         Row: {
           furnished: boolean | null
@@ -619,6 +761,45 @@ export type Database = {
           rating?: number
           reviewed_id?: string
           reviewer_id?: string
+        }
+        Relationships: []
+      }
+      role_requests: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          id: string
+          reason: string | null
+          requested_role: Database["public"]["Enums"]["app_role"]
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          id?: string
+          reason?: string | null
+          requested_role: Database["public"]["Enums"]["app_role"]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          id?: string
+          reason?: string | null
+          requested_role?: Database["public"]["Enums"]["app_role"]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -849,7 +1030,14 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "user" | "owner" | "agent" | "agency" | "admin"
+      app_role:
+        | "user"
+        | "owner"
+        | "agent"
+        | "agency"
+        | "admin"
+        | "tenant"
+        | "visitor"
       payment_method:
         | "cash"
         | "wallet"
@@ -1013,7 +1201,15 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["user", "owner", "agent", "agency", "admin"],
+      app_role: [
+        "user",
+        "owner",
+        "agent",
+        "agency",
+        "admin",
+        "tenant",
+        "visitor",
+      ],
       payment_method: [
         "cash",
         "wallet",
