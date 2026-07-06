@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Building2, Globe, Menu, X, LayoutDashboard, LogOut, MessageSquare, GitCompare, Check } from 'lucide-react';
+import { Building2, Globe, Menu, X, LayoutDashboard, LogOut, MessageSquare, GitCompare, Check, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -19,7 +19,7 @@ const Header = () => {
   const { t, lang, setLang } = useLanguage();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { user, signOut } = useAuth();
+  const { user, signOut, isOwner } = useAuth();
 
   const pickLang = (l: 'fr' | 'ar' | 'en' | 'es' | 'de') => {
     localStorage.setItem('hn_lang_picked', '1');
@@ -124,6 +124,14 @@ const Header = () => {
                   {lang === 'ar' ? 'لوحتي' : 'Espace'}
                 </Button>
               </Link>
+              {isOwner && (
+                <Link to="/owner">
+                  <Button size="sm" variant="ghost" className="gap-1 text-accent">
+                    <Briefcase className="h-4 w-4" />
+                    {lang === 'ar' ? 'المالك' : 'Owner'}
+                  </Button>
+                </Link>
+              )}
               <Button size="sm" variant="ghost" onClick={signOut} className="gap-1 text-muted-foreground">
                 <LogOut className="h-4 w-4" />
               </Button>

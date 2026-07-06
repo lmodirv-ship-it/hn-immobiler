@@ -888,6 +888,8 @@ export type Database = {
           comment: string | null
           created_at: string
           id: string
+          owner_reply: string | null
+          owner_reply_at: string | null
           property_id: string | null
           rating: number
           reviewed_id: string
@@ -899,6 +901,8 @@ export type Database = {
           comment?: string | null
           created_at?: string
           id?: string
+          owner_reply?: string | null
+          owner_reply_at?: string | null
           property_id?: string | null
           rating: number
           reviewed_id: string
@@ -910,6 +914,8 @@ export type Database = {
           comment?: string | null
           created_at?: string
           id?: string
+          owner_reply?: string | null
+          owner_reply_at?: string | null
           property_id?: string | null
           rating?: number
           reviewed_id?: string
@@ -1182,6 +1188,27 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_owner_revenue_series: {
+        Args: { _months?: number; _owner: string }
+        Returns: {
+          bookings: number
+          month: string
+          revenue: number
+        }[]
+      }
+      get_owner_stats: {
+        Args: { _owner: string }
+        Returns: {
+          avg_rating: number
+          confirmed_bookings: number
+          month_revenue: number
+          occupancy_rate: number
+          pending_bookings: number
+          total_properties: number
+          total_reviews: number
+          unread_messages: number
+        }[]
+      }
       get_visitor_stats: {
         Args: never
         Returns: {
