@@ -454,6 +454,42 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          link: string | null
+          read_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          link?: string | null
+          read_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          link?: string | null
+          read_at?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       payment_transactions: {
         Row: {
           admin_notes: string | null
@@ -535,16 +571,57 @@ export type Database = {
           },
         ]
       }
+      platform_settings: {
+        Row: {
+          base_currency: string
+          contact_email: string | null
+          default_commission_pct: number
+          id: boolean
+          maintenance_mode: boolean
+          platform_name: string
+          support_phone: string | null
+          updated_at: string
+          updated_by: string | null
+          vat_pct: number
+        }
+        Insert: {
+          base_currency?: string
+          contact_email?: string | null
+          default_commission_pct?: number
+          id?: boolean
+          maintenance_mode?: boolean
+          platform_name?: string
+          support_phone?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          vat_pct?: number
+        }
+        Update: {
+          base_currency?: string
+          contact_email?: string | null
+          default_commission_pct?: number
+          id?: boolean
+          maintenance_mode?: boolean
+          platform_name?: string
+          support_phone?: string | null
+          updated_at?: string
+          updated_by?: string | null
+          vat_pct?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           agency_name: string | null
           avatar_url: string | null
           bio: string | null
           city: string | null
+          commission_pct: number | null
           created_at: string
           full_name: string | null
           id: string
           phone: string | null
+          suspended: boolean
           type: Database["public"]["Enums"]["profile_type"] | null
           updated_at: string
           verified: boolean | null
@@ -554,10 +631,12 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           city?: string | null
+          commission_pct?: number | null
           created_at?: string
           full_name?: string | null
           id: string
           phone?: string | null
+          suspended?: boolean
           type?: Database["public"]["Enums"]["profile_type"] | null
           updated_at?: string
           verified?: boolean | null
@@ -567,10 +646,12 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           city?: string | null
+          commission_pct?: number | null
           created_at?: string
           full_name?: string | null
           id?: string
           phone?: string | null
+          suspended?: boolean
           type?: Database["public"]["Enums"]["profile_type"] | null
           updated_at?: string
           verified?: boolean | null
@@ -1188,6 +1269,38 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      broadcast_notification: {
+        Args: {
+          _body: string
+          _kind?: string
+          _link?: string
+          _target_role?: Database["public"]["Enums"]["app_role"]
+          _title: string
+        }
+        Returns: number
+      }
+      get_admin_revenue_series: {
+        Args: { _months?: number }
+        Returns: {
+          bookings: number
+          month: string
+          revenue: number
+        }[]
+      }
+      get_admin_stats: {
+        Args: never
+        Returns: {
+          bookings_today: number
+          open_maintenance: number
+          pending_bookings: number
+          pending_properties: number
+          revenue_month: number
+          total_owners: number
+          total_properties: number
+          total_users: number
+          unpaid_invoices: number
+        }[]
+      }
       get_owner_revenue_series: {
         Args: { _months?: number; _owner: string }
         Returns: {
