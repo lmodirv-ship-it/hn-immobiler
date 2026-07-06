@@ -40,6 +40,7 @@ import DashboardAnalytics from "./pages/dashboard/Analytics";
 import DashboardInvoices from "./pages/dashboard/Invoices";
 import DashboardMaintenance from "./pages/dashboard/Maintenance";
 import BookingChat from "./pages/BookingChat";
+import NotificationBridge from "@/components/NotificationBridge";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
           <TooltipProvider>
             <Toaster />
             <Sonner />
+            <NotificationBridge />
             <div className="flex flex-col min-h-screen">
               <Header />
               <main className="flex-1">
