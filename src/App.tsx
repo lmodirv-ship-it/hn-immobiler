@@ -41,6 +41,14 @@ import DashboardInvoices from "./pages/dashboard/Invoices";
 import DashboardMaintenance from "./pages/dashboard/Maintenance";
 import BookingChat from "./pages/BookingChat";
 import NotificationBridge from "@/components/NotificationBridge";
+import OwnerLayout from "./layouts/OwnerLayout";
+import OwnerOverview from "./pages/owner/Overview";
+import OwnerProperties from "./pages/owner/Properties";
+import OwnerBookings from "./pages/owner/Bookings";
+import OwnerCalendar from "./pages/owner/Calendar";
+import OwnerReviews from "./pages/owner/Reviews";
+import OwnerPayouts from "./pages/owner/Payouts";
+import OwnerSettings from "./pages/owner/Settings";
 
 const queryClient = new QueryClient();
 
@@ -86,6 +94,20 @@ const App = () => (
                   <Route path="/dashboard/properties/new" element={<ProtectedRoute><NewProperty /></ProtectedRoute>} />
                   <Route path="/dashboard/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
                   <Route path="/dashboard/viewings" element={<ProtectedRoute><Viewings /></ProtectedRoute>} />
+                  <Route path="/owner" element={<OwnerLayout />}>
+                    <Route index element={<OwnerOverview />} />
+                    <Route path="properties" element={<OwnerProperties />} />
+                    <Route path="properties/new" element={<NewProperty />} />
+                    <Route path="bookings" element={<OwnerBookings />} />
+                    <Route path="calendar" element={<OwnerCalendar />} />
+                    <Route path="messages" element={<Messages />} />
+                    <Route path="reviews" element={<OwnerReviews />} />
+                    <Route path="analytics" element={<DashboardAnalytics />} />
+                    <Route path="invoices" element={<DashboardInvoices />} />
+                    <Route path="maintenance" element={<DashboardMaintenance />} />
+                    <Route path="payouts" element={<OwnerPayouts />} />
+                    <Route path="settings" element={<OwnerSettings />} />
+                  </Route>
                   <Route path="/compare" element={<ProtectedRoute><Compare /></ProtectedRoute>} />
                   <Route path="/favorites" element={<ProtectedRoute><Favorites /></ProtectedRoute>} />
                   <Route path="*" element={<NotFound />} />
