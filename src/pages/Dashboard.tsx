@@ -3,7 +3,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, MessageSquare, Calendar, Building2, Plus, LogOut, CreditCard, ShieldCheck, CalendarCheck2, BarChart3 } from 'lucide-react';
+import { Heart, MessageSquare, Calendar, Building2, Plus, LogOut, CreditCard, ShieldCheck, CalendarCheck2, BarChart3, Receipt, Wrench } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import RoleUpgradeCard from '@/components/RoleUpgradeCard';
@@ -34,6 +34,8 @@ const Dashboard = () => {
     { to: '/dashboard/viewings', icon: Calendar, label: t('Visites', 'الزيارات'), value: stats?.views ?? 0 },
     { to: '/dashboard/bookings', icon: CalendarCheck2, label: t('Réservations', 'الحجوزات'), value: '' },
     { to: '/dashboard/analytics', icon: BarChart3, label: t('Analytique', 'التحليلات'), value: '' },
+    { to: '/dashboard/invoices', icon: Receipt, label: t('Factures', 'الفواتير'), value: '' },
+    { to: '/dashboard/maintenance', icon: Wrench, label: t('Maintenance', 'الصيانة'), value: '' },
   ];
 
   return (
