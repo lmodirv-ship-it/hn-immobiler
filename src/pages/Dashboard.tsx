@@ -3,7 +3,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, MessageSquare, Calendar, Building2, Plus, LogOut, CreditCard, ShieldCheck, CalendarCheck2, BarChart3, Receipt, Wrench } from 'lucide-react';
+import { Heart, MessageSquare, Calendar, Building2, Plus, LogOut, CreditCard, ShieldCheck, CalendarCheck2, BarChart3, Receipt, Wrench, LayoutDashboard } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import RoleUpgradeCard from '@/components/RoleUpgradeCard';
@@ -51,9 +51,10 @@ const Dashboard = () => {
     sections.push({
       title: t('Propriétaire', 'كمالك'),
       cards: [
-        { to: '/dashboard/properties', icon: Building2, label: t('Mes biens', 'عقاراتي'), value: stats?.props ?? 0 },
-        { to: '/dashboard/analytics', icon: BarChart3, label: t('Analytique', 'التحليلات'), value: '' },
-        { to: '/dashboard/maintenance', icon: Wrench, label: t('Maintenance', 'الصيانة'), value: '' },
+        { to: '/owner', icon: LayoutDashboard, label: t('Espace propriétaire', 'مساحة المالك'), value: '' },
+        { to: '/owner/properties', icon: Building2, label: t('Mes biens', 'عقاراتي'), value: stats?.props ?? 0 },
+        { to: '/owner/analytics', icon: BarChart3, label: t('Analytique', 'التحليلات'), value: '' },
+        { to: '/owner/maintenance', icon: Wrench, label: t('Maintenance', 'الصيانة'), value: '' },
       ],
     });
   }
@@ -109,15 +110,13 @@ const Dashboard = () => {
       {isOwner ? (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="glass-strong rounded-2xl p-6 glow-border">
           <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-            <h2 className="font-display text-xl"><span className="text-gradient-gold">{t('Mes biens', 'عقاراتي')}</span></h2>
+            <h2 className="font-display text-xl"><span className="text-gradient-gold">{t('Espace propriétaire avancé', 'مساحة المالك المتقدمة')}</span></h2>
             <div className="flex gap-2">
-              <Link to="/dashboard/properties"><Button variant="outline">{t('Voir tout', 'عرض الكل')}</Button></Link>
-              <Link to="/dashboard/properties/new">
-                <Button className="gap-2 glow-primary"><Plus className="h-4 w-4" /> {t('Ajouter', 'إضافة')}</Button>
-              </Link>
+              <Link to="/owner"><Button className="gap-2 glow-primary"><LayoutDashboard className="h-4 w-4" /> {t('Ouvrir le tableau', 'افتح اللوحة')}</Button></Link>
+              <Link to="/owner/properties/new"><Button variant="outline" className="gap-2"><Plus className="h-4 w-4" /> {t('Ajouter un bien', 'إضافة عقار')}</Button></Link>
             </div>
           </div>
-          <p className="text-muted-foreground text-sm">{t('Gérez vos annonces, suivez les visites et messages.', 'أدر إعلاناتك وتابع الزيارات والرسائل.')}</p>
+          <p className="text-muted-foreground text-sm">{t('KPIs, calendrier global, réservations, avis, analytique — tout au même endroit.', 'مؤشرات، تقويم شامل، حجوزات، تقييمات، تحليلات — كل شيء في مكان واحد.')}</p>
         </motion.div>
       ) : (
         <RoleUpgradeCard />
