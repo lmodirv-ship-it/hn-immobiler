@@ -4,7 +4,9 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { motion } from 'framer-motion';
-import { Eye, Heart, MessageSquare, TrendingUp, Loader2, CalendarCheck2, DollarSign } from 'lucide-react';
+import { Eye, Heart, MessageSquare, TrendingUp, Loader2, CalendarCheck2, DollarSign, Download } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { exportCSV } from '@/lib/export-csv';
 
 const Analytics = () => {
   const { user } = useAuth();
@@ -30,6 +32,11 @@ const Analytics = () => {
 
   const totalViews = props.reduce((s, p) => s + (p.views_count || 0), 0);
 
+  const downloadReport = () =>
+    exportCSV(`analytics-${Date.now()}.csv`, props.map((p) => ({
+      id: p.id, title: p.title, city: p.city, status: p.status, views: p.views_count || 0, price: p.price, currency: p.currency,
+    })));
+
   const cards = [
     { icon: Eye, label: t('Vues totales', 'إجمالي المشاهدات'), value: totalViews, color: 'text-primary' },
     { icon: Heart, label: t('Favoris', 'المفضلة'), value: stats?.favs ?? 0, color: 'text-destructive' },
@@ -41,9 +48,12 @@ const Analytics = () => {
 
   return (
     <div className="container py-10">
-      <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="font-display text-3xl font-bold mb-8">
-        <span className="text-gradient-cyber">{t('Analytique', 'التحليلات')}</span>
-      </motion.h1>
+      <div className="flex items-center justify-between mb-8 flex-wrap gap-3">
+        <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="font-display text-3xl font-bold">
+          <span className="text-gradient-cyber">{t('Analytique', 'التحليلات')}</span>
+        </motion.h1>
+        <Button variant="outline" onClick={downloadReport} className="gap-2"><Download className="h-4 w-4" />{t('Télécharger le rapport', 'تنزيل التقرير')}</Button>
+      </div>
 
       {!stats ? <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" /> : (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
