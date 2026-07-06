@@ -7,11 +7,13 @@ import { Heart, MessageSquare, Calendar, Building2, Plus, LogOut, CreditCard, Sh
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import RoleUpgradeCard from '@/components/RoleUpgradeCard';
+import { useUnreadMessages } from '@/hooks/useUnreadMessages';
 
 const Dashboard = () => {
   const { user, signOut, isOwner, isAdmin } = useAuth();
   const { lang } = useLanguage();
   const t = (fr: string, ar: string) => (lang === 'ar' ? ar : fr);
+  const { unread } = useUnreadMessages(user?.id);
 
   const { data: stats } = useQuery({
     queryKey: ['dashboard-stats', user?.id],
@@ -30,7 +32,7 @@ const Dashboard = () => {
   const cards = [
     { to: '/favorites', icon: Heart, label: t('Mes favoris', 'مفضلتي'), value: stats?.favs ?? 0 },
     { to: '/dashboard/properties', icon: Building2, label: t('Mes biens', 'عقاراتي'), value: stats?.props ?? 0 },
-    { to: '/dashboard/messages', icon: MessageSquare, label: t('Messages', 'الرسائل'), value: stats?.msgs ?? 0 },
+    { to: '/dashboard/messages', icon: MessageSquare, label: t('Messages', 'الرسائل'), value: stats?.msgs ?? 0, badge: unread },
     { to: '/dashboard/viewings', icon: Calendar, label: t('Visites', 'الزيارات'), value: stats?.views ?? 0 },
     { to: '/dashboard/bookings', icon: CalendarCheck2, label: t('Réservations', 'الحجوزات'), value: '' },
     { to: '/dashboard/analytics', icon: BarChart3, label: t('Analytique', 'التحليلات'), value: '' },
@@ -55,8 +57,13 @@ const Dashboard = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
         {cards.map((c, i) => (
           <motion.div key={c.to} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-            <Link to={c.to} className="block glass rounded-xl p-5 glow-border hover:scale-[1.02] transition-transform">
+            <Link to={c.to} className="relative block glass rounded-xl p-5 glow-border hover:scale-[1.02] transition-transform">
               <c.icon className="h-7 w-7 mb-2 text-primary" />
+              {(c as any).badge ? (
+                <span className="absolute top-2 right-2 min-w-[22px] h-[22px] px-1.5 rounded-full bg-destructive text-destructive-foreground text-[11px] font-bold flex items-center justify-center animate-pulse">
+                  {(c as any).badge}
+                </span>
+              ) : null}
               <div className="font-display text-2xl font-bold text-foreground">{c.value}</div>
               <div className="text-xs text-muted-foreground tracking-wider mt-1">{c.label}</div>
             </Link>

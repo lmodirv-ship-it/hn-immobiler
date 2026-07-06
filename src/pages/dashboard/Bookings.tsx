@@ -4,8 +4,9 @@ import { useMyBookings, useUpdateBookingStatus } from '@/hooks/useBookings';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { CalendarDays, Loader2, Users, Check, X } from 'lucide-react';
+import { CalendarDays, Loader2, Users, Check, X, MessageSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const statusColor: Record<string, string> = {
   pending: 'text-yellow-500 border-yellow-500/30',
@@ -48,6 +49,9 @@ const BookingList = ({ userId, role, lang }: { userId: string; role: 'guest' | '
           {role === 'guest' && ['pending', 'confirmed'].includes(b.status) && (
             <Button size="sm" variant="outline" onClick={() => mut.mutate({ id: b.id, status: 'cancelled' })}>{t('Annuler', 'إلغاء')}</Button>
           )}
+          <Link to={`/bookings/${b.id}/chat`}>
+            <Button size="sm" variant="outline" className="gap-1"><MessageSquare className="h-3.5 w-3.5" />{t('Chat', 'دردشة')}</Button>
+          </Link>
         </div>
       ))}
     </div>

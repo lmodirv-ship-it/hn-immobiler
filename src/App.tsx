@@ -39,6 +39,8 @@ import DashboardBookings from "./pages/dashboard/Bookings";
 import DashboardAnalytics from "./pages/dashboard/Analytics";
 import DashboardInvoices from "./pages/dashboard/Invoices";
 import DashboardMaintenance from "./pages/dashboard/Maintenance";
+import BookingChat from "./pages/BookingChat";
+import NotificationBridge from "@/components/NotificationBridge";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +53,7 @@ const App = () => (
           <TooltipProvider>
             <Toaster />
             <Sonner />
+            <NotificationBridge />
             <div className="flex flex-col min-h-screen">
               <Header />
               <main className="flex-1">
@@ -77,6 +80,7 @@ const App = () => (
                   <Route path="/dashboard/analytics" element={<ProtectedRoute><DashboardAnalytics /></ProtectedRoute>} />
                   <Route path="/dashboard/invoices" element={<ProtectedRoute><DashboardInvoices /></ProtectedRoute>} />
                   <Route path="/dashboard/maintenance" element={<ProtectedRoute><DashboardMaintenance /></ProtectedRoute>} />
+                  <Route path="/bookings/:id/chat" element={<ProtectedRoute><BookingChat /></ProtectedRoute>} />
                   <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                   <Route path="/dashboard/properties" element={<ProtectedRoute><MyProperties /></ProtectedRoute>} />
                   <Route path="/dashboard/properties/new" element={<ProtectedRoute><NewProperty /></ProtectedRoute>} />
