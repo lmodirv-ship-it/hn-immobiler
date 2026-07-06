@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.set_booking_host() FROM PUBLIC, anon, authenticated;
