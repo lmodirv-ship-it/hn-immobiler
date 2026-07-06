@@ -16,6 +16,9 @@ import { z } from 'zod';
 import BookViewingDialog from '@/components/BookViewingDialog';
 import SEO from '@/components/SEO';
 import ShareButtons from '@/components/ShareButtons';
+import AvailabilityCalendar from '@/components/AvailabilityCalendar';
+import ReviewList from '@/components/ReviewList';
+import ReviewForm from '@/components/ReviewForm';
 
 const contactSchema = z.object({
   sender_name: z.string().trim().min(2).max(100),
@@ -34,6 +37,7 @@ const PropertyDetail = () => {
   const [isFav, setIsFav] = useState(false);
   const [isCmp, setIsCmp] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [reviewableBookingId, setReviewableBookingId] = useState<string | null>(null);
   const [form, setForm] = useState({ sender_name: '', sender_email: '', sender_phone: '', message: '' });
 
   useEffect(() => {
@@ -53,6 +57,17 @@ const PropertyDetail = () => {
       .then(({ data }) => setIsFav(!!data));
     supabase.from('comparisons').select('property_id').eq('user_id', user.id).eq('property_id', id).maybeSingle()
       .then(({ data }) => setIsCmp(!!data));
+    // find a completed booking by this user without a review yet
+    supabase
+      .from('bookings')
+      .select('id, reviews!left(id)')
+      .eq('property_id', id)
+      .eq('guest_id', user.id)
+      .eq('status', 'completed')
+      .then(({ data }) => {
+        const b = (data ?? []).find((x: any) => !x.reviews || x.reviews.length === 0);
+        setReviewableBookingId(b?.id ?? null);
+      });
   }, [user, id]);
 
   if (isLoading) {
@@ -271,6 +286,22 @@ const PropertyDetail = () => {
               text={`${property.city} — ${formatPriceDb(Number(property.price), property.transaction_type, lang)}`}
             />
           </div>
+
+          {reviewableBookingId && (
+            <div>
+              <h3 className="font-display text-sm tracking-widest uppercase text-primary mb-3">
+                {lang === 'ar' ? 'قيّم إقامتك' : 'Notez votre séjour'}
+              </h3>
+              <ReviewForm
+                propertyId={property.id}
+                bookingId={reviewableBookingId}
+                reviewedId={property.owner_id}
+                onDone={() => setReviewableBookingId(null)}
+              />
+            </div>
+          )}
+
+          <ReviewList propertyId={property.id} />
         </motion.div>
 
         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
@@ -298,6 +329,16 @@ const PropertyDetail = () => {
             </div>
 
             <BookViewingDialog propertyId={property.id} ownerId={property.owner_id} />
+
+            {property.transaction_type !== 'sale' && (
+              <AvailabilityCalendar
+                propertyId={property.id}
+                ownerId={property.owner_id}
+                basePrice={Number(property.price)}
+                currency={property.currency || 'MAD'}
+                seasonalPricing={(property as any).seasonal_pricing || []}
+              />
+            )}
 
             <div className="border-t border-border/50 pt-4">
               <p className="text-xs text-muted-foreground mb-1">{lang === 'ar' ? 'العارض' : 'Annonceur'}</p>

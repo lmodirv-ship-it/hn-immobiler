@@ -604,6 +604,7 @@ export type Database = {
           property_type: Database["public"]["Enums"]["property_type"]
           published_at: string | null
           rooms: number | null
+          seasonal_pricing: Json
           status: Database["public"]["Enums"]["property_status"]
           surface: number | null
           title: string
@@ -641,6 +642,7 @@ export type Database = {
           property_type: Database["public"]["Enums"]["property_type"]
           published_at?: string | null
           rooms?: number | null
+          seasonal_pricing?: Json
           status?: Database["public"]["Enums"]["property_status"]
           surface?: number | null
           title: string
@@ -678,6 +680,7 @@ export type Database = {
           property_type?: Database["public"]["Enums"]["property_type"]
           published_at?: string | null
           rooms?: number | null
+          seasonal_pricing?: Json
           status?: Database["public"]["Enums"]["property_status"]
           surface?: number | null
           title?: string
@@ -881,30 +884,54 @@ export type Database = {
       }
       reviews: {
         Row: {
+          booking_id: string | null
           comment: string | null
           created_at: string
           id: string
+          property_id: string | null
           rating: number
           reviewed_id: string
           reviewer_id: string
+          updated_at: string
         }
         Insert: {
+          booking_id?: string | null
           comment?: string | null
           created_at?: string
           id?: string
+          property_id?: string | null
           rating: number
           reviewed_id: string
           reviewer_id: string
+          updated_at?: string
         }
         Update: {
+          booking_id?: string | null
           comment?: string | null
           created_at?: string
           id?: string
+          property_id?: string | null
           rating?: number
           reviewed_id?: string
           reviewer_id?: string
+          updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "reviews_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       role_requests: {
         Row: {
