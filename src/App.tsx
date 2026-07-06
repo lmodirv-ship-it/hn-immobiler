@@ -30,6 +30,13 @@ import NotFound from "./pages/NotFound";
 import Pricing from "./pages/Pricing";
 import Checkout from "./pages/Checkout";
 import AdminPayments from "./pages/admin/Payments";
+import AdminHome from "./pages/admin/AdminHome";
+import AdminUsers from "./pages/admin/Users";
+import AdminProperties from "./pages/admin/AdminProperties";
+import AdminBookings from "./pages/admin/AdminBookings";
+import RoleRequests from "./pages/admin/RoleRequests";
+import DashboardBookings from "./pages/dashboard/Bookings";
+import DashboardAnalytics from "./pages/dashboard/Analytics";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +66,13 @@ const App = () => (
                   <Route path="/pricing" element={<Pricing />} />
                   <Route path="/checkout/:planId" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
                   <Route path="/admin/payments" element={<ProtectedRoute><AdminPayments /></ProtectedRoute>} />
+                  <Route path="/admin" element={<ProtectedRoute requireAdmin><AdminHome /></ProtectedRoute>} />
+                  <Route path="/admin/users" element={<ProtectedRoute requireAdmin><AdminUsers /></ProtectedRoute>} />
+                  <Route path="/admin/properties" element={<ProtectedRoute requireAdmin><AdminProperties /></ProtectedRoute>} />
+                  <Route path="/admin/bookings" element={<ProtectedRoute requireAdmin><AdminBookings /></ProtectedRoute>} />
+                  <Route path="/admin/role-requests" element={<ProtectedRoute requireAdmin><RoleRequests /></ProtectedRoute>} />
+                  <Route path="/dashboard/bookings" element={<ProtectedRoute><DashboardBookings /></ProtectedRoute>} />
+                  <Route path="/dashboard/analytics" element={<ProtectedRoute><DashboardAnalytics /></ProtectedRoute>} />
                   <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                   <Route path="/dashboard/properties" element={<ProtectedRoute><MyProperties /></ProtectedRoute>} />
                   <Route path="/dashboard/properties/new" element={<ProtectedRoute><NewProperty /></ProtectedRoute>} />
