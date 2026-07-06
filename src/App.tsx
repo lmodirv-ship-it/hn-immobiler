@@ -37,6 +37,8 @@ import AdminBookings from "./pages/admin/AdminBookings";
 import RoleRequests from "./pages/admin/RoleRequests";
 import DashboardBookings from "./pages/dashboard/Bookings";
 import DashboardAnalytics from "./pages/dashboard/Analytics";
+import DashboardInvoices from "./pages/dashboard/Invoices";
+import DashboardMaintenance from "./pages/dashboard/Maintenance";
 
 const queryClient = new QueryClient();
 
@@ -73,6 +75,8 @@ const App = () => (
                   <Route path="/admin/role-requests" element={<ProtectedRoute requireAdmin><RoleRequests /></ProtectedRoute>} />
                   <Route path="/dashboard/bookings" element={<ProtectedRoute><DashboardBookings /></ProtectedRoute>} />
                   <Route path="/dashboard/analytics" element={<ProtectedRoute><DashboardAnalytics /></ProtectedRoute>} />
+                  <Route path="/dashboard/invoices" element={<ProtectedRoute><DashboardInvoices /></ProtectedRoute>} />
+                  <Route path="/dashboard/maintenance" element={<ProtectedRoute><DashboardMaintenance /></ProtectedRoute>} />
                   <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                   <Route path="/dashboard/properties" element={<ProtectedRoute><MyProperties /></ProtectedRoute>} />
                   <Route path="/dashboard/properties/new" element={<ProtectedRoute><NewProperty /></ProtectedRoute>} />
