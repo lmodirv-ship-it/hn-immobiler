@@ -19,7 +19,7 @@ export function useUnreadMessages(userId?: string) {
     if (!userId) return;
     refresh();
     const channel = supabase
-      .channel(`unread-${userId}`)
+      .channel(`unread-${userId}-${Math.random().toString(36).slice(2)}`)
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'messages', filter: `recipient_id=eq.${userId}` },
