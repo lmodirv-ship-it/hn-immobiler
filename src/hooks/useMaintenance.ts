@@ -29,7 +29,7 @@ export function useCreateMaintenance() {
       photo_url?: string;
       priority?: string;
     }) => {
-      const { error } = await supabase.from('maintenance_requests').insert(p);
+      const { error } = await supabase.from('maintenance_requests').insert(p as any);
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['maintenance'] }),
